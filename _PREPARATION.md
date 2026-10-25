@@ -41,7 +41,7 @@ Check:
 
  ```
  git --version                                                             
- git version 2.53npm --.0
+ git version 2.53.0
  ```
 
 
@@ -50,15 +50,15 @@ Check:
 Node and NPM are the fundament for the JavaScript toolchain.  
 The Node installer can be downloaded here: <https://nodejs.org/>
 
-Install a recent version of Node.js.  
+The exercises require Node.js >= 24.15.0  
 
 Check:
 
 ```
 > node --version
-v24.1.0
+v26.12.0
 > npm --version
-11.5.2
+11.17.0
 ```
 
 
