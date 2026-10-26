@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Suche</title>
+  </head>
+  <body>
+    <main>
+      <h1>Frontend-Begriffe suchen</h1>
+      <p>
+        Umsetzung:
+        <a href="/suche.html" data-umsetzung="promise">Promise</a> ·
+        <a href="/suche.html?umsetzung=rxjs" data-umsetzung="rxjs">RxJS</a>
+      </p>
+
+      <label class="search">
+        Suchbegriff
+        <input name="query" type="search" autocomplete="off" />
+      </label>
+
+      <p class="error" role="alert" hidden></p>
+      <h2 class="results-heading"></h2>
+      <ul class="results"></ul>
+
+      <nav><a href="/">Zurück zu den Wörtern</a></nav>
+    </main>
+    <script type="module" src="/src/search-main.ts"></script>
+  </body>
+</html>

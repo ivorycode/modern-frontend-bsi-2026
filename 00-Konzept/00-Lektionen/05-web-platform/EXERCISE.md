@@ -1,11 +1,11 @@
-# Übungsentwurf: Robuster Fetch, kontrollierte Antworten und CORS im Browser
+# Übungsentwurf: Geräteverleih – robuster Fetch, kontrollierte Antworten und CORS im Browser
 
-Status: Beschreibung zur Review, noch keine Übung angelegt.
+Status: Übung angelegt in [Exercises/05-web-platform](../../../Exercises/05-web-platform). Die ausführliche Anleitung für die Teilnehmenden mit Schritt-für-Schritt-Lösungshinweisen steht in deren [README.md](../../../Exercises/05-web-platform/README.md); dieser Entwurf fasst Absicht und Entscheidungen zusammen.
 
 ## Rahmen
 
 - Zeitbedarf: etwa 40 Minuten Kernaufgabe (Teil 1 etwa 25, Teil 2 etwa 15 Minuten), 10 Minuten Besprechung.
-- Voraussetzungen: Block 3 (Zod) und Block 4 (`async`/`await`, asynchrone Tests).
+- Voraussetzungen: Block 3 (`async`/`await`, asynchrone Tests) und Block 4 (Zod).
 
 ## Lernziel
 
@@ -20,7 +20,7 @@ Die Teilnehmenden behandeln die Fehlerpfade eines HTTP-Requests vollständig und
   - Ein Endpunkt mit CORS-Header und einer ohne.
 - Eine Seite, die die Liste lädt und anzeigt. Der vorhandene Code verwendet `fetch(url).then(r => r.json())` ohne Statusprüfung; bei `404` erscheint eine leere oder kaputte Anzeige statt einer Fehlermeldung.
 - Ein Modul `api.ts` mit einer Funktion `loadItems()`, die das echte `fetch` mit der absoluten API-URL aufruft, und einem Zod-Schema für die Antwort.
-- Mock Service Worker (MSW) ist für Vitest eingerichtet: `setupServer` aus `msw/node` in einer Setup-Datei, `listen` mit `onUnhandledRequest: 'error'`, `resetHandlers` nach jedem Test, `close` am Ende. Ein Standard-Handler liefert gültige Daten.
+- Mock Service Worker (MSW 3) ist für Vitest eingerichtet: `setupServer` aus `msw/node` in einer Setup-Datei, `listen` mit `onUnhandledFrame: 'error'` (in MSW 2 `onUnhandledRequest`), `resetHandlers` nach jedem Test, `close` am Ende. Ein Standard-Handler liefert gültige Daten. Zusätzlich lässt das Setup einen Test scheitern, wenn ein Request ohne Handler vorkam: Mit der Strategie `error` scheitert nur der Request, und Code, der Netzwerkfehler abfängt, würde den Test sonst grün lassen.
 - Ein vorbereiteter Test für den Erfolgsfall als Vorlage, dazu ein Beispiel, wie ein Test mit `server.use(...)` einen Handler überschreibt.
 
 ## Aufgabe
@@ -34,7 +34,7 @@ Die Teilnehmenden behandeln die Fehlerpfade eines HTTP-Requests vollständig und
    - Netzwerkfehler und ungültiges JSON unterscheidbar meldet.
 3. Die Anzeige über die Zustände `loading`, `success`, `empty`, `error` steuern.
 4. Tests mit MSW-Handlern ergänzen, die pro Test mit `server.use(...)` die Antwort festlegen: Erfolg, `404`, `500`, ungültiges JSON (`new HttpResponse('kein json', …)`), Netzwerkfehler (`HttpResponse.error()`).
-5. Mit dem Vorgehen aus Block 4 vergleichen: Was ändert sich, wenn `fetch` nicht mehr als Parameter übergeben, sondern auf Netzwerkebene abgefangen wird?
+5. Mit dem Vorgehen aus Block 3 vergleichen: Was ändert sich, wenn `fetch` nicht mehr als Parameter übergeben, sondern auf Netzwerkebene abgefangen wird?
 
 ### Teil 2: CORS untersuchen
 
@@ -69,9 +69,11 @@ Die Teilnehmenden behandeln die Fehlerpfade eines HTTP-Requests vollständig und
 
 ## Entscheidungen
 
-- Netzwerk im Test wird mit Mock Service Worker ersetzt (in Vitest über `msw/node`). Das Setup ist im Ausgangsstand vorbereitet; die Teilnehmenden schreiben Handler und Tests. Block 4 übergibt `fetch` bewusst noch als Parameter, Block 5 steigert das zum Abfangen auf Netzwerkebene.
-
-## Offene Punkte für die Review
-
-- Lokale API selbst schreiben oder 2025er Fastify-Server erweitern?
-- Formular in die Kernaufgabe aufnehmen? Die Agenda nennt Formulare im Blocktitel; im Entwurf sind sie aus Zeitgründen Vertiefung.
+- Netzwerk im Test wird mit Mock Service Worker ersetzt (in Vitest über `msw/node`). Das Setup ist im Ausgangsstand vorbereitet; die Teilnehmenden schreiben Handler und Tests. Block 3 übergibt `fetch` bewusst noch als Parameter, Block 5 steigert das zum Abfangen auf Netzwerkebene.
+- Fachlicher Rahmen: ein Geräteverleih mit Geräten (`id`, `name`, `category`, `available`). `loadItems` heisst entsprechend `loadDevices`.
+- Lokale API selbst geschrieben statt des Fastify-Servers aus 2025: `server/api.ts` mit `node:http`, ohne Framework und ohne zusätzliche Abhängigkeit, gestartet mit `node --watch` (Type Stripping von Node.js). Die CORS-Header stehen dadurch sichtbar im Code. Ports: API 3005, Vite 5177; die API erlaubt genau den Origin `http://localhost:5177`.
+- Szenarien über eine Auswahl auf der Seite: `/api/devices` mit `?scenario=empty|server-error|invalid-json|invalid-data|network-error|slow`, ein unbekannter Pfad für 404 und `/api/devices/archived` ohne CORS-Header. Der Verbindungsabbruch schliesst den Socket; im Browser entsteht wie beim CORS-Fehler `TypeError: Failed to fetch`.
+- Vorbereitet sind die Fehlerklasse `LoadError` mit `reason` sowie `ViewState` und `render` aus Block 4. Die Teilnehmenden schreiben die Prüfungen in `loadDevices`, die Zustandsübergänge in `showDevices` und die Tests.
+- Playwright-Ablauftests gegen die echte API beschreiben das Zielverhalten, darunter den CORS-Fall; zu Beginn besteht nur der Erfolgsfall. `playwright.config.ts` startet API und Entwicklungsserver.
+- Lösung B (Vite-Proxy) wird ausprobiert und wieder entfernt: Über den Proxy wird der Verbindungsabbruch zu HTTP 502, was als Diskussionspunkt dient. Der Endstand verwendet den CORS-Header.
+- Formular bleibt Vertiefung. Die API nimmt dafür bereits `POST /api/devices` mit Validierung durch dasselbe Zod-Schema (`newDeviceSchema` aus `src/device.ts`) und Preflight-Antwort entgegen; die Teilnehmenden bauen nur den Client.

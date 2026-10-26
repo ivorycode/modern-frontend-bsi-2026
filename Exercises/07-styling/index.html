@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kursanmeldung</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="/">Kursportal</a>
+        <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">
+          Menü
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Hauptnavigation">
+          <ul class="site-nav__list">
+            <li><a class="site-nav__link" href="#kurse">Kurse</a></li>
+            <li>
+              <a class="site-nav__link" href="#anmeldung" aria-current="page">Anmeldung</a>
+            </li>
+            <li><a class="site-nav__link" href="#kontakt">Kontakt</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page" id="anmeldung">
+      <h1 class="page__title">Kursanmeldung</h1>
+      <p class="page__intro">
+        Melden Sie sich für einen Kurs an. Die Zusammenfassung zeigt Ihre Angaben, bevor Sie
+        absenden.
+      </p>
+
+      <div class="layout">
+        <form class="registration" novalidate>
+          <div class="field">
+            <label class="field__label" for="name">Name</label>
+            <input class="field__input" id="name" name="name" required autocomplete="name" />
+            <p class="field__error">Bitte geben Sie Ihren Namen an.</p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="email">E-Mail</label>
+            <input
+              class="field__input"
+              id="email"
+              name="email"
+              type="email"
+              required
+              autocomplete="email"
+            />
+            <p class="field__error">Bitte geben Sie eine gültige E-Mail-Adresse an.</p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="course">Kurs</label>
+            <select class="field__input" id="course" name="course" required>
+              <option value="">Bitte wählen …</option>
+              <option>Modern Frontend Development</option>
+              <option>TypeScript für Fortgeschrittene</option>
+              <option>Testing im Frontend</option>
+            </select>
+            <p class="field__error">Bitte wählen Sie einen Kurs.</p>
+          </div>
+
+          <fieldset class="attendance">
+            <legend class="attendance__legend">Teilnahme</legend>
+            <label class="choice">
+              <input type="radio" name="attendance" value="Vor Ort" checked />
+              Vor Ort
+            </label>
+            <label class="choice">
+              <input type="radio" name="attendance" value="Online" />
+              Online
+            </label>
+          </fieldset>
+
+          <div class="field">
+            <label class="field__label" for="note">Bemerkung (optional)</label>
+            <textarea class="field__input" id="note" name="note" rows="3"></textarea>
+          </div>
+
+          <label class="choice">
+            <input type="checkbox" name="consent" />
+            Ich akzeptiere die Teilnahmebedingungen.
+          </label>
+
+          <div class="actions">
+            <button class="button" type="submit" disabled>Anmelden</button>
+            <button class="link-button" type="reset">Zurücksetzen</button>
+          </div>
+
+          <p class="form-status" role="status"></p>
+        </form>
+
+        <aside class="summary" aria-labelledby="summary-title">
+          <h2 class="summary__title" id="summary-title">Ihre Anmeldung</h2>
+          <dl class="summary__list">
+            <div class="summary__row">
+              <dt>Name</dt>
+              <dd data-summary="name">–</dd>
+            </div>
+            <div class="summary__row">
+              <dt>E-Mail</dt>
+              <dd data-summary="email">–</dd>
+            </div>
+            <div class="summary__row">
+              <dt>Kurs</dt>
+              <dd data-summary="course">–</dd>
+            </div>
+            <div class="summary__row">
+              <dt>Teilnahme</dt>
+              <dd data-summary="attendance">Vor Ort</dd>
+            </div>
+          </dl>
+          <p class="summary__subtitle">Im Kurs enthalten:</p>
+          <ul class="summary__includes">
+            <li>Kursunterlagen</li>
+            <li>Mittagessen</li>
+            <li>Teilnahmebestätigung</li>
+          </ul>
+          <button class="button" type="button" data-action="print">Anmeldung drucken</button>
+        </aside>
+      </div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

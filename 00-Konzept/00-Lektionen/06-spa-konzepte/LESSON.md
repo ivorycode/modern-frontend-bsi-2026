@@ -27,7 +27,7 @@ Die Teilnehmenden verstehen die tragenden Konzepte moderner Frontend-Frameworks 
 - **Framework-Einordnung:** Angular, React und Vue – Gemeinsamkeiten (Komponenten, Zustand, TypeScript, npm-Ökosystem) und Unterschiede (Komplettframework gegenüber Bibliothek, Templates gegenüber JSX, Reaktivitätsmodell); Entscheidungskriterien statt Ranking.
 - **Gleiches Konzept, andere API:** dieselbe Übung in React, Angular und Vue; URL-Zustand, abgeleiteter Zustand und Routenparameter in den drei Frameworks vergleichen.
 - **Testing in diesem Block:**
-  - Playwright einführen: Browser steuern, nutzernahe Locators (`getByRole`, `getByLabel`, `getByText`), Web-First Assertions.
+  - Playwright aus Block 1 vertiefen: nutzernahe Locators (`getByRole`, `getByLabel`, `getByText`), Web-First Assertions, mehrere `webServer` und Projekte.
   - Einen Nutzerablauf prüfen: Navigation, Zustandswechsel, Anzeige nach dem Laden.
   - Abgrenzung: Unit-Test für Logik, Playwright für Abläufe.
   - Eine gemeinsame Playwright-Suite für drei Implementierungen zeigt, dass nutzernahe Tests das Verhalten unabhängig vom Framework prüfen.

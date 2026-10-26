@@ -1,0 +1,68 @@
+:root {
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+  color: #1f2933;
+}
+
+main {
+  max-width: 48rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.5rem;
+}
+
+label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+input,
+select,
+button {
+  font: inherit;
+  padding: 0.25rem 0.5rem;
+}
+
+.sentence {
+  display: block;
+  min-height: 3rem;
+  margin: 1.5rem 0 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 1.5rem;
+  background: #f0f4f8;
+  border-radius: 0.5rem;
+}
+
+.status {
+  color: #616e7c;
+}
+
+.error {
+  padding: 0.5rem 1rem;
+  color: #8a1c1c;
+  background: #fde8e8;
+  border-radius: 0.5rem;
+}
+
+.duration {
+  color: #616e7c;
+  font-variant-numeric: tabular-nums;
+}
+
+.search input {
+  width: 20rem;
+}
+
+[aria-current="page"] {
+  font-weight: bold;
+}
+
+nav {
+  margin-top: 2rem;
+}

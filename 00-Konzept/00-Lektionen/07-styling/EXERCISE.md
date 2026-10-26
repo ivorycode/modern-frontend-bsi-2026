@@ -1,99 +1,74 @@
-# Übungsentwurf: Ein Formular responsiv und konsistent gestalten – natives CSS und Tailwind im Vergleich
+# Übungsentwurf: Eine Seite von nativem CSS auf Tailwind umstellen – mit Tests als Sicherheitsnetz
 
-Status: Beschreibung zur Review, noch keine Übung angelegt.
+Status: Übung angelegt in [Exercises/07-styling](../../../Exercises/07-styling). Die ausführliche Anleitung für die Teilnehmenden mit Schritt-für-Schritt-Lösungshinweisen steht in deren [README.md](../../../Exercises/07-styling/README.md); dieser Entwurf fasst Absicht und Entscheidungen zusammen.
 
 ## Rahmen
 
-- Zeitbedarf: etwa 50 Minuten Kernaufgabe, 20 Minuten Vergleich und Besprechung.
-- Voraussetzungen: Block 6 (Playwright-Grundlagen). Keine Framework-Kenntnisse nötig; die Übung arbeitet mit HTML, CSS und wenig TypeScript.
-- Varianten: Die Übung gibt es in zwei Varianten mit identischer Aufgabe – **natives CSS** und **Tailwind CSS**. Die Teilnehmenden wählen eine Variante; im Vergleich arbeiten Paare mit je einer Variante zusammen.
+- Zeitbedarf: etwa 75 Minuten.
+  - Referenz festhalten und Umstellung: 45 Minuten.
+  - Änderungsauftrag: 10 Minuten.
+  - Vergleich und Besprechung: 20 Minuten.
+- Voraussetzungen: Block 1 und 6 (Playwright-Grundlagen). Keine Framework- und keine Tailwind-Kenntnisse nötig; die Anleitung enthält eine Kurzeinführung in Tailwind.
+- Es gibt nur eine Variante. Alle stellen dieselbe Seite um und vergleichen danach ihre eigene Tailwind-Fassung mit der gegebenen CSS-Fassung.
 
 ## Lernziel
 
-Die Teilnehmenden strukturieren eine Seite mit semantischem HTML und gestalten ein Formular mit Grid, Flexbox und Design Tokens responsiv. Komponentenzustände setzen sie konsistent um. Sichtbarkeit und Interaktion prüfen sie mit Playwright bei mehreren Viewports; das Layout kontrollieren sie zusätzlich visuell. Anhand der eigenen und einer fremden Lösung beurteilen sie, welche Stärken und Schwächen natives CSS und Utility-First-CSS haben.
+Die Teilnehmenden lesen eine mit modernem CSS gestaltete Seite und verstehen sie: Grid, Flexbox, Media und Container Queries, Design Tokens, `:has()` und Komponentenzustände. Sie stellen die Seite schrittweise auf Tailwind CSS um, ohne Darstellung oder Verhalten zu verändern. Dabei schützen sie das Refactoring mit Screenshot-Vergleichen und Playwright-Tests. An bewusst eingebauten Stolpersteinen wägen sie Lösungsvarianten ab. Mit einem Änderungsauftrag in beiden Fassungen beurteilen sie aus eigener Erfahrung, welche Stärken und Schwächen natives CSS und Utility-First-CSS haben.
 
-## Ausgangslage (vorzubereiten)
+## Ausgangslage
 
-### Gemeinsam für beide Varianten
+- Vite+-Projekt mit TypeScript ohne Framework, Port 5178. `tailwindcss` und `@tailwindcss/vite` (4.3.3) sind installiert, aber nicht eingebunden; das Einbinden ist Schritt 1.
+- Seite «Kursanmeldung» mit Kopf (Marke, Navigation, Menü-Button), Formular (Name, E-Mail, Kurs, Teilnahme als `fieldset`, Bemerkung, Bedingungen, «Anmelden», «Zurücksetzen») und Zusammenfassung (`aside` mit `dl`, Liste und Button «Anmeldung drucken»). Das Markup ist bereits semantisch; umgebaut wird nur das Styling.
+- `src/styles.css`: sauberes, modernes CSS ohne `@layer` (Tokens in `:root`, Nesting, eine Klasse pro Komponente, Media Query bei `50rem`, Container Query bei `30rem`, Fehlerzustand mit `.field:has(:user-invalid)`).
+- `src/app.ts` setzt nur `aria-expanded`, `disabled` und Text, nie Klassen, und sucht Elemente über Rollen und Attribute statt über Styling-Klassen.
+- `css-referenz/`: unveränderte Kopie der Ausgangsseite unter `/css-referenz/`, als zweiter Einstiegspunkt im Build. Dient dem Vergleich und dem Änderungsauftrag.
+- Playwright mit drei Viewports: `mobil` 375 px, `grenzfall` 784 px (zwischen `48rem` und `50rem`), `desktop` 1280 px. Vier Screenshot-Tests (Ausgangszustand, Menü geöffnet, ausgefüllt mit Fokus und Hover, Fehlerzustand) mit `maxDiffPixelRatio: 0.001` und ein funktionaler Beispieltest.
+- Referenzbilder werden nicht mitgeliefert und sind von Git ausgeschlossen; jede Person erzeugt sie in Schritt 0 auf dem eigenen Rechner.
+- `NOTIZEN.md`: Vorlage für die gewählten Varianten, den Änderungsauftrag und die Vergleichstabelle.
 
-- Zwei Übungsordner auf Basis des Vite+-Starters, je einer pro Variante.
-- Eine Seite «Kursanmeldung» (oder ein vergleichbares Fachformular) mit:
-  - Markup aus verschachtelten `div`s ohne Struktur, Formularfelder ohne `label`, ein «Button» als `div` mit Click-Handler.
-  - Einer Zusammenfassung der Eingaben neben dem Formular und einer Navigation, die auf kleinen Bildschirmen hinter einem Menü-Button verschwinden soll.
-- Eine Designvorgabe als Bild oder kurze Beschreibung: Farben, Abstände, Schrift, zwei Layouts (schmal einspaltig, breit zweispaltig mit Zusammenfassung daneben).
-- Dieselben Design Tokens in beiden Varianten, teilweise ausgefüllt.
-- **Eine gemeinsame Playwright-Testsuite** mit zwei Viewport-Projekten (z. B. Mobil und Desktop), die gegen beide Varianten läuft. Ein Beispieltest ist vorhanden; weitere Tests ergänzen die Teilnehmenden.
-- Musterlösungen beider Varianten für den Vergleich.
+## Stolpersteine
 
-### Pro Variante
+Alle Stolpersteine sind im Prototyp nachgewiesen; die Lösungsvarianten in der Anleitung sind geprüft.
 
-| | Natives CSS | Tailwind CSS |
+| Stolperstein | Wo er auftritt | Lösungsvarianten in der Anleitung |
 | --- | --- | --- |
-| Ausgangs-CSS | Minimales, unsystematisches CSS mit festen Pixelbreiten und wiederholten Farbwerten | Tailwind ist eingerichtet (Vite-Plugin); im Markup stehen willkürliche Werte wie `w-[347px]` und `bg-[#1a5fb4]` |
-| Design Tokens | Custom Properties in `:root` | `@theme`-Block in der CSS-Datei (Tailwind 4 erzeugt daraus Utilities und Custom Properties) |
-| Ordnung | `@layer`, Nesting, eine Klasse pro Komponente | Utilities im Markup, Wiederholung bei Bedarf in einer kleinen Komponentenfunktion oder einem Template |
-| Responsive | Media Query oder Container Query | `md:`-Präfixe oder `@container`-Varianten |
-| Zustände | `:hover`, `:focus-visible`, `:disabled`, `:user-invalid` | `hover:`, `focus-visible:`, `disabled:`, `user-invalid:` |
+| A: Preflight verändert die Seite | Schritt 1: Überschriften verlieren die Fettschrift, die Liste Aufzählungszeichen und Einzug, weil das CSS dafür den Browser-Standard nutzt | ausdrücklich gestalten / Preflight vorerst weglassen / bewusst akzeptieren |
+| B: Standardpalette und Zeilenhöhen | Schritt 2: Tailwinds Farben bleiben neben den Tokens verfügbar; `text-sm` setzt zusätzlich `line-height` 1.43 statt der geerbten 1.5 | `--color-*: initial` oder Palette behalten; `--text-sm--line-height` im Token, `leading-normal` je Stelle oder bewusst übernehmen |
+| C: Altes CSS überschreibt Utilities | Schritt 3: Utilities verlieren gegen CSS ohne Layer, auch versteckt über `* { margin: 0 }` gegen `mx-auto` | alte Regel löschen / altes CSS mit `@import "./styles.css" layer(legacy)` unter die Utilities legen / `!` als Notlösung |
+| D: Zustand eines anderen Elements | Schritt 3 (Menü über `aria-expanded`) und Schritt 5 (Fehler über `:user-invalid`) | `group-has-[…]` / `@custom-variant` / `peer` / kleine eigene Regel |
+| E: Grössen ausserhalb der Skala | Schritt 4 (Breakpoint `50rem` gegenüber `md` = `48rem`, nur im Viewport `grenzfall` sichtbar) und Schritt 7 (Container `30rem` gegenüber `@md` = `28rem`) | willkürlich `min-[50rem]:` / Token `--breakpoint-wide` / Design angleichen |
+| F: Ein Wert aus der Designvorgabe | Schritt 4: Zusammenfassung `350px` breit | willkürlicher Wert / Token `--spacing-summary` / runden; Hinweis auf `w-87.5`, das mit dem Grundabstand skaliert |
+| G: Reihenfolge der Varianten | Schritt 5: Hover über einem ungültigen Feld färbt den Rahmen in Tailwind grau, im CSS bleibt er rot; kein Test bemerkt es | `user-invalid:hover:border-danger` |
+| H: Wiederholung | Schritt 6: Button zweimal, Eingabefelder viermal | wiederholen / `@utility btn` mit `@apply` / Komponente im Framework (nur einordnen) |
 
-## Aufgabe
+## Ablauf
 
-1. Das Markup semantisch strukturieren: `header`, `nav`, `main`, `form`, `label`-Zuordnung, echter `button`.
-2. Die Design Tokens vervollständigen und alle festen Farb- und Abstandswerte durch Tokens ersetzen.
-3. Das Layout umsetzen:
-   - Formularfelder mit Grid ausrichten.
-   - Schmal einspaltig, ab einer sinnvollen Breite zweispaltig mit der Zusammenfassung daneben.
-   - Navigation auf kleinen Bildschirmen über den Menü-Button ein- und ausblendbar.
-4. Zustände der Eingabefelder und des Buttons gestalten: Hover, Fokus, deaktiviert und Fehler.
-5. Playwright-Tests in der gemeinsamen Suite ergänzen:
-   - Mobil: Navigation ist zunächst verborgen und nach Klick auf den Menü-Button sichtbar.
-   - Desktop: Navigation ist ohne Klick sichtbar; die Zusammenfassung steht neben dem Formular (z. B. über Bounding Boxes).
-   - Ein ungültiges Feld zeigt nach dem Absenden eine sichtbare Fehlermeldung.
-6. Layout in den DevTools bei mehreren Breiten visuell prüfen und Abweichungen von der Vorgabe notieren.
-
-## Vergleich der Varianten
-
-In Paaren mit je einer Variante, danach im Plenum, anhand der eigenen Lösungen oder der Musterlösungen:
-
-1. Die gemeinsame Playwright-Suite gegen beide Lösungen laufen lassen. Beide sollen bestehen; das Verhalten ist gleich, nur die Umsetzung unterscheidet sich.
-2. Beide Lösungen anhand derselben Kriterien vergleichen und in einer Tabelle festhalten:
-   - **Lesbarkeit:** Wie gut versteht man Markup und Styling einer Komponente beim ersten Lesen?
-   - **Änderung der Designvorgabe:** Die Primärfarbe und den Grundabstand ändern. Wie viele Stellen sind betroffen?
-   - **Neue Variante einer Komponente:** einen sekundären Button ergänzen. Wo entsteht der Code, und was wird wiederholt?
-   - **Konsistenz:** Wie leicht schleichen sich Werte ausserhalb der Tokens ein (`w-[347px]` gegenüber festem Pixelwert im CSS)?
-   - **Gültigkeitsbereich:** Wie gross ist das Risiko, dass eine Änderung ungewollt andere Stellen beeinflusst?
-   - **Werkzeuge:** DevTools-Diagnose, Editor-Unterstützung, Umfang des ausgelieferten CSS im Build.
-3. Fazit formulieren: Für welches Projekt (Design System, Fachanwendung mit Komponentenbibliothek, kleine Inhaltsseite) passt welcher Ansatz?
-
-## Abnahmekriterien
-
-- Keine festen Farbwerte und keine festen Seitenbreiten ausserhalb der Tokens (in der Tailwind-Variante: keine willkürlichen Werte in eckigen Klammern).
-- Das Layout entspricht bei schmaler und breiter Darstellung der Vorgabe; kein horizontales Scrollen bei 320 px Breite.
-- Alle Komponentenzustände sind sichtbar unterscheidbar.
-- Die gemeinsame Playwright-Suite läuft für beide Viewports grün und nutzt nutzernahe Locators.
-- Die Teilnehmenden benennen, welche Aspekte die Tests nicht abdecken und wie sie diese visuell geprüft haben.
-- Die Vergleichstabelle ist ausgefüllt und mit Beispielen aus dem Code belegt.
-
-## Vertiefung für Schnellere
-
-- Die Seite zusätzlich in der anderen Variante umsetzen und den Vergleich aus eigener Erfahrung ergänzen.
-- Dunkles Farbschema über die Tokens ergänzen (natives CSS: `light-dark()`; Tailwind: `dark:`-Variante oder Token-Überschreibung) und beide Schemata in Playwright mit `colorScheme` öffnen.
-- Einen Screenshot-Vergleich (`toHaveScreenshot`) für eine Komponente einrichten und bewusst eine Änderung auslösen.
+- **Teil 1:** Schritt 0 (Seite kennenlernen, Referenzbilder erzeugen), Schritte 1–7 (einbinden, Tokens, Kopf, Layout, Formular, Buttons, Zusammenfassung), Schritt 8 (altes CSS entfernen, funktionale Tests für Menü, Layout und Fehler ergänzen, visuell prüfen). Bei Zeitmangel entfallen Schritte 6 und 7.
+- **Teil 2:** Änderungsauftrag in beiden Fassungen: Primärfarbe, Grundabstand `0.3rem`, sekundärer Button «Entwurf speichern». Referenzbilder danach bewusst aktualisieren. Ergebnis im Prototyp: Beide Fassungen bleiben gleich bis auf den Einzug der Liste, weil `pl-10` mit dem Grundabstand wächst und die 40 px des Browsers nicht.
+- **Teil 3:** Vergleichstabelle aus eigener Erfahrung, Fazit nach Projektart.
 
 ## Optional mit Agent
 
-- Auftrag: Designvorgabe als Bild oder Text mitgeben und das responsive Layout mit Tokens umsetzen lassen, wahlweise in einer oder in beiden Varianten.
-- Besonders prüfen: Werden Tokens konsequent verwendet oder neue feste beziehungsweise willkürliche Werte eingeführt? Entspricht das Layout bei allen Breiten der Vorgabe (selbst im Browser kontrollieren)? Bleibt das Markup semantisch, oder entstehen wieder `div`-Buttons?
-- Für den Vergleich: Den Agenten eine Lösung in die andere Variante übertragen lassen und mit der gemeinsamen Suite prüfen; die Vergleichskriterien beurteilen die Teilnehmenden selbst.
+Der Agent stellt die Seite um; die Teilnehmenden prüfen die gewählten Varianten, eingeführte Palettenfarben oder willkürliche Werte, unveränderte Tests und Referenzbilder sowie Stolperstein G im Browser. Änderungsauftrag und Vergleich führen sie selbst durch.
 
 ## Material aus 2025
 
-- `07-Styling/vite-tailwind-starter` und `07-Styling/tailwind-demo` als Ausgangspunkt für die Tailwind-Variante; Einrichtung auf Tailwind 4 mit Vite-Plugin und `@theme` prüfen.
-- `04-web-platform/05-forms/client/test.html` als mögliche Basis für das Formular.
 - Tailwind-Abwägung aus [06-Styling.pdf](../../../../modern-frontend-bsi-2025/00-CourseMaterial/06-Styling.pdf), S. 13–16, als Einstieg in den Vergleich.
+- Die Beispiele `07-Styling/vite-tailwind-starter` und `07-Styling/tailwind-demo` wurden nicht übernommen; die Übung verwendet Tailwind 4 mit Vite-Plugin und `@theme`.
+
+## Entscheidungen
+
+- Eine Umstellung von CSS auf Tailwind statt zweier paralleler Varianten. Der Vergleich beruht so auf eigener Erfahrung mit beiden Fassungen derselben Seite. Eine Umstellung in Gegenrichtung wird nicht angeboten.
+- Die gegebene CSS-Fassung ist sauber und modern, damit der Vergleich nicht durch schlechtes Ausgangs-CSS verzerrt wird. Die Stolpersteine entstehen aus Unterschieden der Ansätze. Das `fieldset` ist im CSS ausdrücklich gestaltet, damit Preflight gezielt Überschriften und Liste trifft und nicht den schwer nachzubauenden Rahmen des Browsers.
+- Tailwind ist vorinstalliert und versionsgenau festgelegt, damit `npm ci` im Kurs ohne zusätzlichen Download reicht und alle dieselbe Version verwenden.
+- Semantisches HTML ist Thema der Folien, nicht der Übung.
+- Screenshot-Vergleiche sind Kern der Übung: Bei einem Refactoring ohne gewollte Änderung der Darstellung sind sie das passende Sicherheitsnetz. Stolperstein G zeigt zugleich ihre Grenze.
+- `:user-invalid` greift in Chrome auch mit `novalidate` nach einem Absendeversuch; ein zusätzliches Attribut am Formular ist nicht nötig.
+- Schrittweise Umstellung mit eingebundenem altem CSS statt Neuschreiben. Das entspricht der Praxis, macht Stolperstein C erlebbar und erlaubt einen Teilabschluss.
+- Die Gesamtlösung steht ausklappbar am Ende der Anleitung, nicht als eigene Seite im Projekt; sonst bräuchte sie vor Schritt 1 eine eingebundene Tailwind-Konfiguration.
+- Tailwind durchsucht alle nicht ignorierten Dateien im Übungsordner, auch `README.md`. Dadurch enthält das gebaute CSS einige zusätzliche Utilities; für den Grössenvergleich in Teil 3 ist das vernachlässigbar.
 
 ## Offene Punkte für die Review
 
-- Reicht die Zeit für Umsetzung und Vergleich? Alternative: Vergleich nur anhand der Musterlösungen, damit die Kernaufgabe die vollen 60 Minuten erhält.
-- Fachbeispiel mit Block 3 abstimmen (gleiches Datenmodell «Kursanmeldung» würde Wiedererkennung schaffen, ohne Abhängigkeit zwischen den Übungen).
-- Designvorgabe selbst gestalten oder ein bestehendes Design System als Referenz nehmen?
-- Sollen in der Tailwind-Variante wiederkehrende Klassen über Komponentenfunktionen gebündelt werden, oder bewusst nicht, damit die Wiederholung im Vergleich sichtbar wird?
+- Reichen 45 Minuten für Schritt 0 bis 8? Erfahrungswerte aus einem Probelauf fehlen.
+- Die Referenzbilder sind unter macOS geprüft; unter Windows und Linux ist nur zu erwarten, dass sie auf demselben Rechner stabil bleiben.

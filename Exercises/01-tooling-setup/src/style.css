@@ -1,0 +1,66 @@
+:root {
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+  color: #1f2933;
+}
+
+main {
+  max-width: 34rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.hint {
+  color: #616e7c;
+  font-size: 0.9rem;
+}
+
+form {
+  display: grid;
+  gap: 1rem;
+}
+
+label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+fieldset {
+  display: flex;
+  gap: 1.5rem;
+  border: 1px solid #cbd2d9;
+  border-radius: 0.5rem;
+}
+
+fieldset label,
+label.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+input,
+select {
+  font: inherit;
+  padding: 0.25rem 0.5rem;
+}
+
+.result {
+  margin-top: 2rem;
+  padding: 1rem 1.5rem;
+  background: #f0f4f8;
+  border-radius: 0.5rem;
+}
+
+.result label {
+  display: inline;
+}
+
+output {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.error {
+  color: #b42318;
+}

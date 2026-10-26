@@ -14,7 +14,7 @@ Die Teilnehmenden kommunizieren mit `fetch` korrekt über HTTP, inklusive Status
   - Response lesen: `ok`, `status`, `headers`; Body einmalig als `text()` oder `json()` konsumieren.
   - `fetch` lehnt nur bei Netzwerkfehlern ab, nicht bei HTTP 404 oder 500 – Status explizit prüfen.
   - Fehlerarten unterscheiden: Netzwerkfehler, HTTP-Fehler, ungültiger Body, Abbruch.
-  - Ein kleiner, typisierter HTTP-Helper mit Statusprüfung und Validierung der Antwort (Brücke zu Block 3).
+  - Ein kleiner, typisierter HTTP-Helper mit Statusprüfung und Validierung der Antwort (Brücke zu Block 4).
 - **JSON:** `JSON.stringify` und `JSON.parse`; was verloren geht (`Date`, `BigInt`, `Map`, `Set`, `undefined`); Replacer und Reviver kurz.
 - **Same Origin Policy und CORS:**
   - Was ist ein Origin; warum der Browser Antworten fremder Origins schützt.
@@ -31,8 +31,8 @@ Die Teilnehmenden kommunizieren mit `fetch` korrekt über HTTP, inklusive Status
 - **Browser-Entwicklerwerkzeuge:** Network-Tab mit Headern, Payload, Response und Timing; Request als `fetch` oder `curl` kopieren; Console-Meldungen zu CORS lesen.
 - **Überblick weiterer Plattform-APIs (je eine Folie):** WebSocket für bidirektionale Kommunikation, Streams für inkrementelle Antworten (z. B. LLM-Ausgaben), Web Worker für rechenintensive Arbeit.
 - **Testing in diesem Block:**
-  - Netzwerkabhängigkeiten durch vorbereitete Antworten ersetzen; Varianten `fetch` als Parameter (Block 4), `vi.stubGlobal` und Mock Service Worker im Überblick.
-  - Mock Service Worker als Werkzeug des Blocks: Handler mit `http.get` und `HttpResponse`, Überschreiben pro Test mit `server.use`, `onUnhandledRequest: 'error'`; im Browser optional als echter Service Worker.
+  - Netzwerkabhängigkeiten durch vorbereitete Antworten ersetzen; Varianten `fetch` als Parameter (Block 3), `vi.stubGlobal` und Mock Service Worker im Überblick.
+  - Mock Service Worker als Werkzeug des Blocks: Handler mit `http.get` und `HttpResponse`, Überschreiben pro Test mit `server.use`, `onUnhandledFrame: 'error'` (MSW 3; in MSW 2 `onUnhandledRequest`); im Browser optional als echter Service Worker.
   - Angular-Projekte: `HttpTestingController` (`provideHttpClientTesting`) als framework-eigene Alternative für Code, der `HttpClient` verwendet.
   - Erfolg, HTTP-Fehler, ungültiges JSON und Netzwerkfehler gezielt testen.
   - Unterscheiden, was ein Test mit ersetzten Antworten belegt und was nur der echte Request im Browser zeigt (CORS, Header, tatsächliche API).

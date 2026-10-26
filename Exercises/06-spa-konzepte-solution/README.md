@@ -1,0 +1,9 @@
+# Musterlösung zu Übung 6: Schadenfälle
+
+Aufgabe: [Übung 6](../06-spa-konzepte/README.md)
+
+Je eine Musterlösung pro Variante; jede ist ein eigenständiges npm-Projekt mit eigener Anleitung zum Starten:
+
+- [React](./react/README.md): `http://localhost:5181/`
+- [Vue](./vue/README.md): `http://localhost:5182/`
+- [Angular](./angular/README.md): `http://localhost:5183/`

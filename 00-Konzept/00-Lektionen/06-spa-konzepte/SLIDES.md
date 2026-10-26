@@ -16,7 +16,7 @@ Erster Entwurf für etwa 45 Minuten Input. «2025: S. x» verweist auf [07-SPA-C
 7. **`UI = f(state)`** – Zustand liegt in JavaScript, die UI folgt. 2025: S. 14.
 8. **Reaktivität** – wie Frameworks Änderungen erkennen: Virtual DOM, Signals, Fine-Grained Reactivity. 2025: S. 13, 15–17.
 9. **Nicht jeder Zustand ist gleich** – Tabelle: lokal, gemeinsam, Serverdaten, URL, abgeleitet; jeweils Beispiel und typischer Ort.
-10. **Serverdaten sind ein Cache** – Laden, Fehler, Aktualität, Invalidierung; Bezug zu den Zuständen aus Block 3.
+10. **Serverdaten sind ein Cache** – Laden, Fehler, Aktualität, Invalidierung; Bezug zu den Zuständen aus Block 4.
 11. **Fachlogik gehört nicht in die Komponente** – reine Funktionen auslagern und unabhängig testen.
 12. **Übungsfrage** – ein UI-Ausschnitt; das Publikum ordnet jedes Stück Zustand einer Kategorie zu.
 
@@ -44,9 +44,9 @@ Erster Entwurf für etwa 45 Minuten Input. «2025: S. x» verweist auf [07-SPA-C
 
 ## Testing und Übung
 
-26. **Playwright in einer Folie** – Browser automatisieren, Abläufe prüfen. 2025: [05-FrontendTooling.pdf](../../../../modern-frontend-bsi-2025/00-CourseMaterial/05-FrontendTooling.pdf) S. 38.
+26. **Playwright aus Block 1 in einer Folie** – Rückblick: Browser automatisieren, Abläufe prüfen.
 27. **Nutzernahe Locators** – `getByRole`, `getByLabel`, `getByText` statt CSS-Selektoren; Quelle Playwright Best Practices.
-28. **Ein erster Playwright-Test** – Seite öffnen, klicken, Ergebnis erwarten; Web-First Assertions warten automatisch.
+28. **Ein Ablauf über mehrere Seiten** – Liste, Detail, zurück; Web-First Assertions warten automatisch; API als zusätzlicher `webServer`.
 29. **Ein Test, drei Frameworks** – dieselbe Playwright-Suite läuft gegen alle Varianten; nutzernahe Tests sind unabhängig von der Implementierung.
 30. **Unit-Test oder Playwright?** – Testpyramide angepasst an Frontend-Projekte.
 31. **Übung 6** – Verweis auf `EXERCISE.md`, Wahl der Variante.

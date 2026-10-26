@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prämienrechner</title>
+  </head>
+  <body>
+    <main>
+      <h1>Prämienrechner</h1>
+      <p class="hint">Fiktive Tarifregeln für die Übung, keine echten Prämien.</p>
+
+      <form id="premium-form">
+        <label>
+          Alter
+          <input id="age" name="age" type="number" min="0" max="120" step="1" value="40" />
+        </label>
+
+        <label>
+          Franchise
+          <select id="deductible" name="deductible"></select>
+        </label>
+
+        <fieldset>
+          <legend>Versicherungsmodell</legend>
+          <label><input type="radio" name="model" value="standard" checked /> Standard</label>
+          <label><input type="radio" name="model" value="familyDoctor" /> Hausarzt</label>
+        </fieldset>
+
+        <label class="checkbox">
+          <input id="dental" name="dental" type="checkbox" />
+          Zahnversicherung
+        </label>
+      </form>
+
+      <section class="result">
+        <h2>Ihre Prämie</h2>
+        <p><label for="monthly">Monatsprämie</label> <output id="monthly"></output></p>
+        <p><label for="yearly">Jahresprämie</label> <output id="yearly"></output></p>
+        <p id="age-error" class="error" hidden>
+          Bitte ein Alter zwischen 0 und 120 Jahren eingeben.
+        </p>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

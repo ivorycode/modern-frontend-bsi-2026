@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wörter laden</title>
+  </head>
+  <body>
+    <main class="sentence-loader">
+      <h1>Wörter laden</h1>
+      <p>Die Wort-API liefert einen Satz Wort für Wort; jede Antwort ist zufällig verzögert.</p>
+
+      <div class="controls">
+        <label>
+          Szenario
+          <select name="scenario">
+            <option value="ok">Alle Wörter verfügbar</option>
+            <option value="error">Wort 5 schlägt fehl</option>
+          </select>
+        </label>
+        <button type="button" class="parallel">Parallel laden</button>
+        <button type="button" class="sequential">Sequenziell laden</button>
+      </div>
+
+      <output class="sentence" aria-label="Satz"></output>
+      <p class="status" hidden>Lädt …</p>
+      <p class="error" role="alert" hidden></p>
+      <p class="duration"></p>
+
+      <nav><a href="/suche.html">Vertiefung: Suche</a></nav>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

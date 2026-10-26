@@ -1,0 +1,370 @@
+/*
+ * Styling der Kursanmeldung mit nativem CSS.
+ *
+ * Aufbau: Design Tokens, Grundregeln, Seitenkopf, Seitenlayout, Formular, Zusammenfassung,
+ * Buttons. Eine Klasse pro Komponente, Unterelemente mit Nesting.
+ */
+
+/* ---------- Design Tokens ---------- */
+
+:root {
+  --color-primary: #1a5fb4;
+  --color-primary-hover: #154a8c;
+  --color-text: #1f2933;
+  --color-muted: #52606d;
+  --color-border: #c5ced8;
+  --color-surface: #f4f6f8;
+  --color-danger: #b42318;
+  --color-white: #ffffff;
+
+  /* Alle Abstände sind Vielfache des Grundabstands. */
+  --space-unit: 0.25rem;
+  --space-1: calc(var(--space-unit) * 1);
+  --space-2: calc(var(--space-unit) * 2);
+  --space-3: calc(var(--space-unit) * 3);
+  --space-4: calc(var(--space-unit) * 4);
+  --space-6: calc(var(--space-unit) * 6);
+  --space-8: calc(var(--space-unit) * 8);
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.75rem;
+
+  --font-sans: system-ui, sans-serif;
+}
+
+/* ---------- Grundregeln ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-white);
+}
+
+/* ---------- Seitenkopf mit Navigation ---------- */
+
+.site-header {
+  background: var(--color-primary);
+  color: var(--color-white);
+
+  & .site-header__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-6);
+    max-width: 72rem;
+    margin-inline: auto;
+    padding: var(--space-3) var(--space-4);
+  }
+}
+
+.brand {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: inherit;
+  text-decoration: none;
+}
+
+.menu-button {
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--color-white);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-white);
+    outline-offset: 2px;
+  }
+}
+
+/* Mobil verborgen; der Menü-Button blendet die Navigation ein. */
+.site-nav {
+  display: none;
+  flex-basis: 100%;
+
+  & .site-nav__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: 0;
+    list-style: none;
+  }
+
+  & .site-nav__link {
+    display: block;
+    padding: var(--space-2) 0;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &[aria-current="page"] {
+      font-weight: 700;
+    }
+  }
+}
+
+.site-header:has([aria-expanded="true"]) .site-nav {
+  display: block;
+}
+
+@media (width >= 50rem) {
+  .menu-button {
+    display: none;
+  }
+
+  .site-nav {
+    display: block;
+    flex-basis: auto;
+
+    & .site-nav__list {
+      flex-direction: row;
+      gap: var(--space-6);
+    }
+  }
+}
+
+/* ---------- Seitenlayout ---------- */
+
+.page {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: var(--space-6) var(--space-4) var(--space-8);
+}
+
+.page__title {
+  font-size: var(--text-xl);
+  line-height: 1.25;
+}
+
+.page__intro {
+  margin-block: var(--space-2) var(--space-6);
+  color: var(--color-muted);
+}
+
+.layout {
+  display: grid;
+  gap: var(--space-8);
+  align-items: start;
+}
+
+/* Zusammenfassung neben dem Formular; die Breite von 350px stammt aus der Designvorgabe. */
+@media (width >= 50rem) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) 350px;
+  }
+}
+
+/* ---------- Formular ---------- */
+
+.registration {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-1);
+
+  & .field__label {
+    font-weight: 600;
+  }
+
+  & .field__input {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-white);
+    color: inherit;
+    font: inherit;
+
+    &:hover {
+      border-color: var(--color-muted);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 1px;
+    }
+  }
+
+  & .field__error {
+    display: none;
+    font-size: var(--text-sm);
+    color: var(--color-danger);
+  }
+}
+
+/* Fehlerzustand: sobald ein Feld nach einer Eingabe oder einem Absendeversuch ungültig ist. */
+.field:has(:user-invalid) {
+  & .field__label {
+    color: var(--color-danger);
+  }
+
+  & .field__input {
+    border-color: var(--color-danger);
+  }
+
+  & .field__error {
+    display: block;
+  }
+}
+
+.attendance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  padding: 0;
+  border: none;
+
+  & .attendance__legend {
+    margin-bottom: var(--space-1);
+    padding: 0;
+    font-weight: 600;
+  }
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+
+  & input {
+    accent-color: var(--color-primary);
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.form-status {
+  color: var(--color-primary);
+  font-weight: 600;
+
+  &:empty {
+    display: none;
+  }
+}
+
+/* ---------- Zusammenfassung ---------- */
+
+.summary {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  container-type: inline-size;
+
+  & .summary__title {
+    font-size: var(--text-lg);
+    line-height: 1.25;
+  }
+
+  & .summary__list {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  & .summary__row {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  & dt {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+
+  & dd {
+    overflow-wrap: anywhere;
+  }
+
+  & .summary__subtitle {
+    font-weight: 600;
+  }
+
+  & .summary__includes {
+    margin-top: calc(var(--space-2) * -1);
+  }
+}
+
+/* Begriff und Wert nebeneinander, sobald die Zusammenfassung genug Platz hat. */
+@container (width >= 30rem) {
+  .summary .summary__row {
+    grid-template-columns: 8rem 1fr;
+    align-items: baseline;
+  }
+}
+
+/* ---------- Buttons ---------- */
+
+.button {
+  justify-self: start;
+  padding: var(--space-2) var(--space-4);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: var(--color-white);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--color-primary-hover);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:disabled:hover {
+    background: var(--color-primary);
+  }
+}
+
+.link-button {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-primary);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}

@@ -1,61 +1,84 @@
-# Übungsentwurf: Vom Skript-Wirrwarr zu ES-Modulen
+# Übungsentwurf: Einkaufslisten – Modulzustand, Closures und unveränderliche Updates
 
-Status: Beschreibung zur Review, noch keine Übung angelegt.
+Status: Übung angelegt in [Exercises/02-javascript](../../../Exercises/02-javascript). Die ausführliche Anleitung für die Teilnehmenden mit Schritt-für-Schritt-Lösungshinweisen steht in deren [README.md](../../../Exercises/02-javascript/README.md); dieser Entwurf fasst Absicht und Entscheidungen zusammen.
 
 ## Rahmen
 
-- Zeitbedarf: etwa 25 Minuten Kernaufgabe, 10 Minuten Besprechung.
-- Voraussetzungen: Block 1 (Projektbefehle, Tests ausführen).
+- Zeitbedarf: etwa 25 Minuten Kernaufgabe (Teil 1 etwa 12, Teil 2 etwa 13 Minuten), 10 Minuten Besprechung.
+- Voraussetzungen: Block 1 (Projektbefehle, Tests ausführen und lesen).
 
 ## Lernziel
 
-Die Teilnehmenden erklären, warum klassische Skripte sich über den globalen Scope gegenseitig beeinflussen. Sie teilen den Code in ES-Module auf und sichern das Verhalten eines Moduls mit einfachen Tests ab.
+Die Teilnehmenden erklären, warum ein ES-Modul nur einmal ausgewertet wird und Zustand auf Modulebene deshalb von allen Importen geteilt wird. Sie kapseln den Zustand mit einer Factory-Funktion in einer Closure. Sie erkennen, dass eine flache Kopie die enthaltenen Objekte teilt, ersetzen Mutationen durch unveränderliche Updates und sichern beides mit Unit-Tests ab.
 
-## Ausgangslage (vorzubereiten)
+Damit deckt die Übung die drei Schwerpunkte der Lektion ab: Module, funktionale Programmierung mit Closures und unveränderliche Daten. Objektorientierung und `this` folgen in der Vertiefung.
 
-- Modernisierte Fassung von `02-Language/92-Spaghetti` aus 2025, in einem eigenen Übungsordner auf Basis des Vite+-Starters:
-  - Eine Seite mit zwei unabhängigen Funktionen: «Werte speichern/laden» und «Zeitstempel speichern/anzeigen».
-  - Beide liegen als klassische Skripte (`<script src>`, ohne `type="module"`) vor und definieren gleichnamige Funktionen und Konstanten (`STORAGE_PREFIX`, `loadValues`, `storeValues`).
-  - jQuery wird durch DOM-APIs ersetzt, damit sich die Übung auf Module konzentriert.
-- Die zweite Funktion ist zunächst auskommentiert. Nach dem Einkommentieren funktioniert die erste Funktion nicht mehr korrekt.
-- Vitest ist eingerichtet; eine leere Testdatei für das Speichermodul liegt bereit.
+## Ausgangslage
+
+- Übungsordner auf Basis von Übung 1 (Vite+, npm, Vitest, Playwright mit installiertem Chrome), Entwicklungsserver auf festem Port 5174, damit die Übung neben Übung 1 laufen kann.
+- Eine Seite mit zwei gleich aufgebauten Einkaufslisten («Wocheneinkauf», «Party»): hinzufügen, abhaken, Menge ändern, entfernen, rückgängig.
+- `src/shopping-list.ts` (Fachlogik ohne DOM) mit zwei eingebauten Fehlern:
+  1. **Geteilter Modulzustand:** `items`, `history` und `nextId` liegen auf Modulebene. Beide Listenansichten importieren dasselbe Modul und teilen sich die Liste.
+  2. **Flache Kopie in der Historie:** `history.push([...items])` kopiert nur das Array; `toggle` und `changeQuantity` ändern die Objekte direkt. «Rückgängig» funktioniert deshalb nach `add` und `remove`, aber nicht nach `toggle` und `changeQuantity`.
+- `src/list-view.ts` importiert das Modul direkt (`import * as shoppingList`) und verwendet die Higher-Order Function `action(change)`, die eine Änderung ausführt und neu zeichnet.
+- `src/shopping-list.test.ts`: fünf Tests, von denen vier wegen des geteilten Zustands fehlschlagen; einzeln ausgeführt bestehen sie. Zwei `it.todo` für Teil 2.
+- `e2e/shopping-list.spec.ts`: je ein Playwright-Test pro Fehler, beide schlagen anfangs fehl.
+- Immer als Abhängigkeit für die Vertiefung.
 
 ## Aufgabe
 
-1. Seite starten, die zweite Funktion einkommentieren und das fehlerhafte Verhalten beobachten.
-2. Ursache erklären: welche Bezeichner kollidieren, und welches Skript «gewinnt»?
-3. Beide Funktionen in ES-Module aufteilen:
-   - Speicherlogik (Laden/Speichern mit Präfix) als eigenes Modul ohne DOM-Zugriff, das `Storage` als Parameter erhält.
-   - DOM-Anbindung (Event Handler) in je einem Modul pro Funktion.
-   - Ein `main.ts` importiert beide.
-4. Zwei bis drei Tests für das Speichermodul schreiben, z. B. «gespeicherte Werte werden mit demselben Präfix wieder geladen» und «zwei Präfixe beeinflussen sich nicht». Als Storage dient ein einfaches Testobjekt oder eine `Map`-basierte Attrappe.
-5. Prüfen, dass beide Funktionen im Browser gleichzeitig korrekt arbeiten.
+### Teil 1: Zwei Listen, ein Zustand
+
+1. Fehler im Browser reproduzieren: Ein Eintrag der einen Liste erscheint in der anderen, aber erst nach deren nächstem Neuzeichnen.
+2. Tests ausführen und feststellen, dass ein Test allein besteht und zusammen mit anderen fehlschlägt.
+3. Ursache erklären: Modul wird einmal ausgewertet; Modulvariablen entsprechen `static`-Feldern in Java.
+4. `createShoppingList()` als Factory-Funktion mit Zustand in der Closure schreiben; Schnittstelle `ShoppingList` mit Funktionstypen.
+5. Tests auf `beforeEach` mit frischer Liste umstellen; Test «hält zwei Listen unabhängig voneinander» ergänzen.
+6. `setupListView(root, shoppingList)` erhält die Liste als Parameter; `main.ts` erzeugt pro Abschnitt eine Liste.
+
+### Teil 2: «Rückgängig» nach dem Abhaken
+
+1. Im Browser vergleichen, nach welchen Operationen «Rückgängig» funktioniert.
+2. Vier fehlschlagende Tests schreiben: bisheriger Stand bleibt beim Abhaken und Hinzufügen unverändert; Abhaken und Mengenänderung lassen sich rückgängig machen.
+3. Ursache erklären: flache Kopie, geteilte Objekte; `const` entspricht `final`.
+4. Alle Operationen mit `update(next)` und nicht mutierenden Ausdrücken umschreiben (`[...items, newItem]`, `map` mit `{ ...item, … }`, `filter`).
+5. Begründen, warum `history.push(items)` danach ohne Kopie korrekt ist, und `structuredClone` als Symptombehandlung einordnen.
+6. `readonly` für `Item` als Absicherung durch den Compiler.
 
 ## Abnahmekriterien
 
-- Keine Funktion und keine Konstante liegt im globalen Scope.
-- Beide Funktionen der Seite arbeiten unabhängig voneinander.
-- Die Tests für das Speichermodul laufen grün und schlagen fehl, wenn beide Module denselben Präfix verwenden.
-- Die Teilnehmenden können Named Export, Modul-Scope und die Rolle von `type="module"` erklären.
+- Kein Zustand auf Modulebene; beide Listen arbeiten unabhängig.
+- Keine Operation verändert ein bestehendes Array oder Objekt.
+- Die neuen Tests schlagen vor der Korrektur fehl und bestehen danach.
+- `npm run check`, `npm test` und `npm run e2e` laufen ohne Fehler.
+- Die Teilnehmenden können Modul-Scope, Closure und flache Kopie erklären.
 
 ## Vertiefung für Schnellere
 
-- Aufwärm- oder Zusatzaufgabe aus `02-Language/91-CapturingScope`: drei kleine Fehler zu Closure in der Schleife, verlorenem `this` und eingefangenem Wert beheben und jeweils erklären. Eine Variante mit herausgelösten, testbaren Funktionen wäre möglich.
-- Das Speichermodul so ändern, dass es gespeicherte Objekte nicht mutiert zurückgibt, und das mit einem Test belegen.
+- **Klasse mit privaten Feldern:** dieselbe Liste als `class` mit `#items`. `action(shoppingList.undo)` verliert `this`; Oxlint warnt mit `unbound-method`, im Browser erscheint `TypeError: Cannot read properties of undefined (reading '#history')`. Lösungen mit Arrow Function, `bind` oder Class Field; Vergleich mit Java-Methodenreferenzen.
+- **Immer:** `toggle` mit `produce` umschreiben; die Tests bleiben grün, und `Object.isFrozen` zeigt, dass Immer den neuen Stand einfriert.
 
 ## Optional mit Agent
 
-- Auftrag: «Teile die beiden Skripte in ES-Module auf. Die Speicherlogik darf keinen DOM-Zugriff enthalten. Prüfe mit `test` und `check`.»
-- Besonders prüfen: Liegen noch Bezeichner global (`window.*`)? Testen die erzeugten Tests die Unabhängigkeit der Präfixe oder nur den Normalfall?
+- Auftrag ohne Lösungsvorgabe: «Beide Listen teilen sich ihren Zustand, und ‹Rückgängig› funktioniert nach dem Abhaken nicht. Schreibe zuerst fehlschlagende Unit-Tests, behebe dann beide Fehler.»
+- Besonders prüfen: tiefe Kopie statt unveränderlicher Updates (überdeckt das Symptom, zwei Tests bleiben rot); verbliebener Modulzustand (`nextId`); Tests, die den geteilten Zustand nur verstecken.
+
+## Geprüft
+
+Am 25. Oktober 2026 mit Node 26.12, npm 11.17, `vite-plus` 1.4.0, `@playwright/test` 1.64.1 und Immer 11.2.9:
+
+- Ausgangsstand: `npm run check` ohne Befund; `npm test` mit 4 fehlschlagenden, 1 bestandenen und 2 `todo`-Tests; beide Playwright-Tests schlagen fehl.
+- Stand nach Teil 1 mit den Tests aus Teil 2: die vier neuen Tests schlagen fehl, der erste Playwright-Test besteht, der zweite nicht.
+- Variante mit `structuredClone` in der Historie: die beiden Tests zum unveränderten bisherigen Stand schlagen weiterhin fehl.
+- Lösung aus dem README: `check`, 10 Unit-Tests und beide Playwright-Tests ohne Fehler; mit `readonly`-Feldern meldet eine wieder eingebaute Mutation `TS2540`.
+- Vertiefungen: Klassenvariante mit den beschriebenen Meldungen, Korrektur mit Class Field; Immer-Variante mit eingefrorenem Stand.
 
 ## Material aus 2025
 
-- `02-Language/92-Spaghetti` und `92-Spaghetti-solution` (ES-Module-Lösung); die ES5/IIFE-Lösung entfällt.
-- `02-Language/91-CapturingScope` und `91-CapturingScope-solution` für die Vertiefung.
-- Übungsblatt [01-Exercise-Modern-JavaScript.md](../../../../modern-frontend-bsi-2025/00-CourseMaterial/01-Exercise-Modern-JavaScript.md), Übungen 1 und 2.
+- Kein Übungscode übernommen. Die globale Namenskollision aus `02-Language/92-Spaghetti` dient nur noch als kurze Folien-Demo; Schritt 1.4 der Anleitung greift sie als Kontrollfrage auf.
+- `02-Language/91-CapturingScope` entfällt als Übung; `this`-Verlust ist Teil der Vertiefung.
 
 ## Offene Punkte für die Review
 
-- Kernübung Module und Vertiefung Scope – oder umgekehrt? Die Scope-Übung ist schneller, die Modul-Übung näher am Projektalltag.
-- Übung in JavaScript oder bereits in TypeScript? JavaScript hält den Fokus auf Sprachkonzepten; TypeScript passt zum einheitlichen Starter.
-- Soll das Speichermodul `localStorage` direkt nutzen und im Test mit jsdom/happy-dom laufen, oder `Storage` als Parameter erhalten (einfacher, zeigt Testbarkeit durch Module)?
+- Reichen 25 Minuten für beide Teile, oder wird Teil 2 bei wenig JavaScript-Erfahrung zur gemeinsamen Besprechung?
+- Soll die Lösung zusätzlich als eigener Ordner vorliegen (z. B. für die Trainer-Demo), oder genügen die Lösungshinweise im README wie in Übung 1?

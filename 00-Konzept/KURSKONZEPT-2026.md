@@ -22,9 +22,11 @@ Dieser Block steht vor den Sprach- und Plattformthemen. Er schafft die gemeinsam
 - Browser-Entwicklerwerkzeuge und Git-Diffs für die Arbeit an kleinen Änderungen nutzen.
 - Erklären, wie die unabhängigen Übungsordner gestartet, geprüft und auf ihren jeweiligen Ausgangsstand zurückgesetzt werden.
 
+**Toolchain:** Die Übungen verwenden [Vite+](https://viteplus.dev/) als Entwicklungsabhängigkeit des jeweiligen Projekts und laufen mit Node.js und npm, wie sie in [_PREPARATION.md](../_PREPARATION.md) geprüft werden. Eine globale Installation von Vite+ ist weder nötig noch vorausgesetzt. Die Projektbefehle stehen als npm-Skripte in `package.json` (`npm run dev`, `npm run check`, `npm test`, `npm run build`, `npm run e2e`) und rufen das lokale `vp` auf. End-to-End-Tests laufen mit Playwright im bereits installierten Chrome (`channel: "chrome"`), damit kein zusätzlicher Browser-Download nötig ist.
+
 ### Tests als unmittelbare Rückmeldung
 
-Für die Testing-Grundlagen sind etwa 30 Minuten innerhalb des Auftaktblocks vorgesehen. An einer kleinen, vorbereiteten synchronen Funktion ohne Netzwerk und UI üben die Teilnehmenden:
+Für die Testing-Grundlagen sind etwa 40 Minuten innerhalb des Auftaktblocks vorgesehen. Grundlage ist eine kleine interaktive Seite mit einer synchronen Fachfunktion ohne Netzwerk. An der Fachfunktion üben die Teilnehmenden mit Vitest:
 
 1. Tests mit Vitest starten und die Ausgabe lesen.
 2. Einen Test verstehen: Vorbereitung, Aktion und erwartetes Ergebnis.
@@ -32,7 +34,9 @@ Für die Testing-Grundlagen sind etwa 30 Minuten innerhalb des Auftaktblocks vor
 4. Die Implementierung korrigieren und erneut prüfen.
 5. Einen zusätzlichen Testfall ergänzen und seine Erwartung begründen.
 
-Das Einstiegsziel lautet: **Tests als Rückmeldung verwenden und einfache Erwartungen formulieren können.** Die Testkonfiguration ist vorbereitet. Der Einstieg benötigt weder fortgeschrittene TypeScript-Kenntnisse noch Promises, Mocking oder Browserautomation. Diese Inhalte werden später anhand konkreter Aufgaben eingeführt.
+Anschliessend lernen sie einen ersten End-to-End-Test mit Playwright kennen. Die Seite enthält einen absichtlich eingebauten Fehler, der nur bei der Interaktion im Browser sichtbar wird, während alle Unit-Tests bestehen. Die Teilnehmenden reproduzieren ihn im Browser, korrigieren ihn und sichern das Verhalten mit einem Playwright-Test ab. So wird früh sichtbar, dass Unit-Tests und Abläufe im Browser unterschiedliche Aussagen belegen.
+
+Das Einstiegsziel lautet: **Tests als Rückmeldung verwenden und einfache Erwartungen formulieren können.** Die Testkonfiguration für Vitest und Playwright ist vorbereitet. Der Einstieg benötigt weder fortgeschrittene TypeScript-Kenntnisse noch Promises oder Mocking. Diese Inhalte und weiterführende Playwright-Techniken werden später anhand konkreter Aufgaben eingeführt.
 
 ### Optionale Einbindung von Coding Agents
 
@@ -45,6 +49,8 @@ Dabei werden folgende Punkte kurz behandelt:
 - Änderungen im Diff und das tatsächliche Verhalten im Browser kontrollieren.
 - Zugriffe, Secrets und externe Anweisungen einordnen; Arbeitsrechte passend zur Übung begrenzen.
 
+Ein Schwerpunkt der Demonstration ist die Inspektion der laufenden Seite durch den Agenten. Ohne Browserzugriff kennt ein Agent nur den Quellcode und muss das Verhalten der Seite erschliessen. Mit der [Playwright CLI](https://github.com/microsoft/playwright-cli) öffnet er die Seite, interagiert mit ihr, liest Seitenstruktur und Console-Meldungen, prüft seine Korrektur im Browser und hält den Befund als Playwright-Test fest. Die CLI ist in `@playwright/test` enthalten (`npx playwright cli`) und benötigt keine weitere Installation; sie funktioniert mit jedem Agenten, der Befehle im Terminal ausführen kann. Als Alternativen werden das [Chrome DevTools MCP](https://developer.chrome.com/blog/chrome-devtools-mcp-debug-your-browser-session), das sich auch an eine laufende Chrome-Sitzung anbinden kann, und die in Agenten oder Editoren eingebauten Browser eingeordnet.
+
 Die Teilnehmenden können die Demonstration verfolgen oder mit einem bereits verfügbaren Agenten mitmachen. Einrichtung und Anmeldung sind keine Voraussetzung für die folgenden Blöcke. Falls eine Live-Demonstration nicht möglich ist, dienen ein vorbereiteter Ablauf und ein Beispieldiff als Ersatz.
 
 Der Arbeitszyklus aus Implementieren, Prüfen und Korrigieren wird sowohl in der [OpenAI-Dokumentation](https://developers.openai.com/blog/run-long-horizon-tasks-with-codex) als auch in den [Claude-Code-Empfehlungen](https://code.claude.com/docs/en/best-practices) beschrieben. Hinweise zu knappen Projektanweisungen finden sich bei [OpenAI](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra), Risiken und Schutzmechanismen bei [GitHub](https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/risks-and-mitigations). Diese Quellen dienen als Hintergrund für die optionale Agenteneinbindung.
@@ -53,12 +59,13 @@ Der Arbeitszyklus aus Implementieren, Prüfen und Korrigieren wird sowohl in der
 
 | Bereich | Entscheidung | Schwerpunkt 2026 |
 | --- | --- | --- |
-| JavaScript-Syntax | Kürzen, Kern behalten | Module, Destructuring, Array-Operationen, Optional Chaining, Referenzen und Mutation an realem Code lesen und erklären. |
-| Funktionen und Closures | Beibehalten, an Fehlern vermitteln | Scope, eingefangene Werte, Event Handler, Funktionskomposition; `this` bei Bedarf am gewählten Framework erklären. |
-| Klassen und fortgeschrittene Sprachmittel | Stark kürzen | Keine ausführliche Reise durch `call`/`apply`, Symbols, eigene Iteratoren, Proxies und Generatoren. Relevante Konstrukte bei ihrem Auftreten erklären. |
+| ECMAScript-Module | Beibehalten | `import`/`export`, Modul-Scope statt globalem Scope, native Module und Bundler; Module als Grundlage für testbaren Code. |
+| Funktionale und objektorientierte Programmierung | Beibehalten, neu als Vergleich mit Java gliedern | Beide Stile nebeneinander: Callbacks, Higher-Order Functions, innere Funktionen und Closures; Klassen mit privaten Feldern `#` und das von Java abweichende Verhalten von `this`. An typischen Fehlern vermitteln. |
+| Unveränderliche Daten | Vertiefen, Immer neu | Referenzen und Mutation, flache und tiefe Kopien, unveränderliche Updates mit Spread und nicht mutierenden Array-Methoden, Immer; Bezug zur Änderungserkennung in UI-Frameworks. |
+| JavaScript-Syntax und fortgeschrittene Sprachmittel | Stark kürzen | Moderne Syntax nur so weit, wie sie zum Lesen der Beispiele nötig ist. Keine ausführliche Reise durch `call`/`apply`, Symbols, eigene Iteratoren, Proxies und Generatoren; Vererbung nur zum Lesen. Relevante Konstrukte bei ihrem Auftreten erklären. |
+| Async JavaScript | Vertiefen, Historie kürzen | `async`/`await`, Fehlerpfade, Parallelität, Abbruch, Race Conditions und veraltete Antworten. |
 | TypeScript | Vertiefen und fokussieren | Strikte Typprüfung, `unknown`, Narrowing, diskriminierte Unions, verständliche Verträge; problematische Assertions und `any` im Review erkennen. |
 | Laufzeitvalidierung | Vertiefen | API-Antworten und Formulare mit einem Schemawerkzeug validieren; Fehler sinnvoll behandeln. |
-| Async JavaScript | Vertiefen, Historie kürzen | `async`/`await`, Fehlerpfade, Parallelität, Abbruch, Race Conditions und veraltete Antworten. |
 | RxJS | Zielgruppenabhängig | Allgemeiner Kurs: Zustand, Einzelresultat und Ereignisstrom unterscheiden. Angular-lastiger Kurs: zusätzlich `switchMap`, Fehlerbehandlung und Subscription-Lebensdauer. |
 | Web Platform APIs | Kern behalten | HTTP, Fetch, CORS, JSON und Formulare; Browser-Entwicklerwerkzeuge praktisch nutzen. Streaming als Wahlthema; WebSocket und Worker nach Anwendungsbedarf. |
 | Tooling | An den Kursanfang ziehen, Katalog kürzen | Arbeitsumgebung und Projekt-Setup vorbereiten; Installation, Typprüfung, Linting und Build verstehen. Erste Tests praktisch nutzen und optionale Agentenanbindung demonstrieren. |
@@ -112,12 +119,12 @@ Testing wird als Querschnittsthema vermittelt. Einen separaten Testing-Block gib
 
 | Themenblock | Testkenntnisse und Anwendung |
 | --- | --- |
-| Tooling und Setup | Synchrone Tests mit Vitest lesen, starten, Fehlerausgaben verstehen und einen Testfall ergänzen. |
-| JavaScript | Das Verhalten einer kleinen Funktion oder eines Moduls mit einfachen Erwartungen absichern. |
-| TypeScript und Laufzeitvalidierung | Gültige und ungültige Eingaben, Grenzfälle und erwartete Fehler testen; statische Typprüfung und Laufzeittests unterscheiden. |
+| Tooling und Setup | Synchrone Tests mit Vitest lesen, starten, Fehlerausgaben verstehen und einen Testfall ergänzen. Einen ersten Playwright-Test ausführen und einen Interaktionsfehler mit einem Ablauftest absichern. |
+| JavaScript | Das Verhalten einer kleinen Funktion oder eines Moduls mit einfachen Erwartungen absichern, etwa dass eine Update-Funktion ihre Eingabe nicht verändert. |
 | Async JavaScript | Asynchrone Tests nach der Einführung von Promises und `async`/`await` schreiben; Reihenfolge und Fehlerfälle mit kontrolliert verzögerten Antworten untersuchen. |
+| TypeScript und Laufzeitvalidierung | Gültige und ungültige Eingaben, Grenzfälle und erwartete Fehler testen; statische Typprüfung und Laufzeittests unterscheiden. |
 | Web Platform APIs | Netzwerkabhängigkeiten durch vorbereitete Antworten kontrollieren; echte Requests und Testantworten unterscheiden. CORS zusätzlich im Browser untersuchen, da ersetzte Netzwerkantworten dessen tatsächliches Verhalten nicht belegen. |
-| SPA-Konzepte | Playwright an einem vorbereiteten Mini-Beispiel einführen; Zustandswechsel und Navigation aus Nutzersicht prüfen. |
+| SPA-Konzepte | Playwright an einem vorbereiteten Mini-Beispiel vertiefen; Zustandswechsel und Navigation aus Nutzersicht prüfen. |
 | Styling | Browserprüfungen für Interaktionen und Sichtbarkeit ergänzen; Darstellung bei unterschiedlichen Bildschirmgrössen untersuchen. |
 
 Testkonfiguration und benötigte Hilfsmittel werden pro Übung mitgeliefert. Beim Async-Thema steht zunächst das Verständnis des Verhaltens im Vordergrund; Details wie simulierte Timer oder umfangreiches Mocking bleiben Vertiefungen bei Bedarf.
@@ -157,11 +164,11 @@ Die Testaufgaben werden bewusst variiert: In einer Übung helfen vorgegebene Tes
 
 | Themenblock | Kleine, eigenständige Kernübung | Optionale Nutzung eines Agenten |
 | --- | --- | --- |
-| Tooling und Setup | Starter starten, einen synchronen Test lesen und ausführen, einen Fehler einbauen und korrigieren sowie einen Testfall ergänzen. Typprüfung und Build kennenlernen. | Eine kleine Änderung delegieren, dieselben Tests ausführen und den Diff kontrollieren. |
-| JavaScript | Ein Scope-Problem korrigieren oder zwei Skripte in ES-Module aufteilen. | Eine Korrektur vorschlagen lassen und ihre Wirkung erklären. |
-| TypeScript | Ladezustände mit einer diskriminierten Union modellieren und unsichere Zugriffe beseitigen. | Einen Typentwurf erzeugen und auf ungültige Zustände prüfen. |
-| Laufzeitvalidierung | Vorgegebene JSON-Daten validieren, Fehler darstellen und Tests für gültige und ungültige Eingaben ergänzen. | Ein Schema und Tests vorschlagen lassen und deren Erwartungen fachlich überprüfen. |
+| Tooling und Setup | Starter starten, einen synchronen Test lesen und ausführen, einen Fehler einbauen und korrigieren sowie einen Testfall ergänzen. Typprüfung und Build kennenlernen. Einen Interaktionsfehler im Browser finden und mit einem Playwright-Test absichern. | Den Agenten die Seite mit der Playwright CLI inspizieren lassen, den Fehler reproduzieren und beheben lassen, dieselben Tests ausführen und den Diff kontrollieren. |
+| JavaScript | Zwei Einkaufslisten teilen sich den Zustand eines Moduls: Zustand mit einer Factory-Funktion in einer Closure kapseln. «Rückgängig» scheitert an einer flachen Kopie: Mutationen durch unveränderliche Updates ersetzen und mit Tests belegen, dass der bisherige Stand unverändert bleibt. | Eine Korrektur vorschlagen lassen und prüfen, ob sie die Ursache behebt oder nur das Symptom überdeckt (z. B. tiefe Kopie statt unveränderlicher Updates). |
 | Async JavaScript | Wörter parallel beziehungsweise sequenziell laden und das Verhalten asynchron testen; als Vertiefung eine Race Condition in einem separaten Suchbeispiel beheben. | Eine Umsetzung oder Fehlerdiagnose anfordern und mit Tests sowie Beobachtungen im Browser prüfen. |
+| TypeScript | Ladezustände mit einer diskriminierten Union modellieren und unsichere Zugriffe beseitigen. | Einen Typentwurf erzeugen und auf ungültige Zustände prüfen. |
+| Laufzeitvalidierung | Asynchron geladene JSON-Antworten validieren, Fehler darstellen und Tests für gültige und ungültige Eingaben ergänzen. | Ein Schema und Tests vorschlagen lassen und deren Erwartungen fachlich überprüfen. |
 | Web Platform APIs | In einem vorbereiteten Fetch-Beispiel HTTP-Fehler behandeln, Erfolg und Fehler mit kontrollierten Antworten testen und CORS im Browser untersuchen. | Testfälle vorschlagen lassen und mit den Anforderungen sowie echten Netzwerkantworten abgleichen. |
 | SPA-Konzepte | In einem vorbereiteten Mini-Beispiel Zustandsverantwortung zuordnen oder eine zusätzliche Route ergänzen; einen Nutzerablauf mit Playwright prüfen. | Einen Änderungsvorschlag einholen und Verantwortlichkeiten sowie Testaussagen beurteilen. |
 | Styling | Ein kleines Formular responsive gestalten; Browserprüfungen ergänzen und das Layout visuell kontrollieren. | Änderungen und Prüfungen vorschlagen lassen und Layout sowie Darstellung selbst beurteilen. |
@@ -172,12 +179,12 @@ Vorschlag mit zwölf Netto-Unterrichtsstunden, Pausen zusätzlich:
 
 | Tag | Block | Zeit |
 | --- | --- | --- |
-| 1 | Einführung, Tooling, Arbeitsumgebung und Projekt-Setup mit etwa 30 Minuten Testing-Grundlagen; kurze Demonstration der optionalen Agenteneinbindung | 120 min |
-| 1 | Modernes JavaScript mit unabhängiger Modul- oder Scope-Übung und einfachen Verhaltenstests | 60 min |
-| 1 | TypeScript, Datenverträge, Laufzeitvalidierung und Zustandsmodellierung; Einzelübungen mit Tests für Eingaben und Fehlerfälle | 90 min |
+| 1 | Einführung, Tooling, Arbeitsumgebung und Projekt-Setup mit etwa 40 Minuten Testing-Grundlagen (Vitest und ein erster Playwright-Test); kurze Demonstration der optionalen Agenteneinbindung mit Browserinspektion | 120 min |
+| 1 | Modernes JavaScript: ES-Module, funktionale und objektorientierte Programmierung im Vergleich zu Java, unveränderliche Updates; unabhängige Übung mit einfachen Verhaltenstests | 60 min |
 | 1 | Async JavaScript und Fehlersuche mit Wort-API beziehungsweise Suchbeispiel; Einführung asynchroner Tests | 90 min |
+| 1 | TypeScript, Datenverträge, Laufzeitvalidierung und Zustandsmodellierung; Einzelübungen mit Tests für Eingaben und Fehlerfälle | 90 min |
 | 2 | Web Platform APIs: Fetch, HTTP, CORS und Formulare; Einzelübungen mit kontrollierten Netzwerkantworten und Browserbeobachtung | 90 min |
-| 2 | SPA-Konzepte: Komponenten, Zustand, Routing und Rendering; Framework-Einordnung und erste Playwright-Prüfung am Mini-Beispiel | 105 min |
+| 2 | SPA-Konzepte: Komponenten, Zustand, Routing und Rendering; Framework-Einordnung und Playwright-Prüfung von Nutzerabläufen am Mini-Beispiel | 105 min |
 | 2 | Styling und semantisches HTML; eigenständige UI-Übung mit Browserprüfungen und visueller Kontrolle | 120 min |
 | 2 | Rückblick, Grenzen grüner Tests, offene Fragen und Transfer ins eigene Projekt | 45 min |
 

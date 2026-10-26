@@ -52,7 +52,7 @@ Erster Entwurf für etwa 45 Minuten Input. «2025: S. x» verweist auf [06-Styli
 ## Testing und Übung
 
 30. **Was sich im Browser automatisch prüfen lässt** – Sichtbarkeit, Interaktion, Verhalten bei verschiedenen Viewports.
-31. **Playwright mit mehreren Viewports** – Codebeispiel; dieselbe Suite prüft beide Styling-Varianten.
-32. **Grenzen automatischer Prüfungen** – grüner Test gegenüber gutem Layout; Screenshot-Vergleiche als Option mit Kosten.
-33. **Übung 7** – Verweis auf `EXERCISE.md`, Wahl der Variante, Ablauf des Vergleichs.
+31. **Playwright mit mehreren Viewports** – Codebeispiel mit Projekten pro Viewport; `toHaveScreenshot` als Sicherheitsnetz beim Refactoring von Styles.
+32. **Grenzen automatischer Prüfungen** – grüner Test gegenüber gutem Layout; Kosten von Screenshot-Vergleichen (Abhängigkeit vom Betriebssystem, Pflege der Referenzbilder).
+33. **Übung 7** – Verweis auf `EXERCISE.md`: CSS-Fassung schrittweise auf Tailwind umstellen, Referenzbilder zuerst festhalten, Stolpersteine mit Lösungsvarianten, Änderungsauftrag und Vergleich.
 34. **Zusammenfassung** – Struktur in HTML, Layout mit Grid und Flexbox, Konsistenz mit Tokens, Abnahme mit Test und Auge.

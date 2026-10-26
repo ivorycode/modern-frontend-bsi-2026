@@ -10,7 +10,7 @@ Erster Entwurf für etwa 35 Minuten Input. «2025: S. x» verweist auf [04-WebPl
 4. **Die Response lesen** – `ok`, `status`, `headers`, `text()` gegenüber `json()`; Body nur einmal lesbar.
 5. **Stolperstein: 404 ist kein Fehler für `fetch`** – Codebeispiel ohne und mit Statusprüfung; Quelle MDN.
 6. **Vier Arten, wie ein Request scheitert** – Netzwerk, HTTP-Status, ungültiger Body, Abbruch; jeweils Erkennungsmerkmal.
-7. **Ein kleiner HTTP-Helper** – `getJson(url, schema)` mit Statusprüfung und Zod-Validierung; Verweis auf Block 3.
+7. **Ein kleiner HTTP-Helper** – `getJson(url, schema)` mit Statusprüfung und Zod-Validierung; Verweis auf Block 4.
 8. **Und axios/ky?** – ein Satz zur Einordnung. 2025: S. 6, gekürzt.
 
 ## JSON
@@ -44,7 +44,7 @@ Erster Entwurf für etwa 35 Minuten Input. «2025: S. x» verweist auf [04-WebPl
 
 24. **Netzwerk im Test ersetzen** – drei Varianten mit Vor- und Nachteilen: `fetch` als Parameter (explizit, Umbau nötig), `vi.stubGlobal` (kein Umbau, globaler Zustand), Mock Service Worker (realistisch, mehr Setup); Entscheidung für den Kurs: MSW.
 25. **Mock Service Worker: wie es funktioniert** – Abfangen auf Netzwerkebene; im Browser über einen echten Service Worker, in Node über abgefangene `fetch`- und HTTP-Aufrufe; der Anwendungscode bleibt unverändert.
-26. **MSW-Handler und Testaufbau** – `http.get`, `HttpResponse.json`, `HttpResponse.error()`, `delay()`; `setupServer`, `server.use` pro Test, `resetHandlers`, `onUnhandledRequest: 'error'`.
+26. **MSW-Handler und Testaufbau** – `http.get`, `HttpResponse.json`, `HttpResponse.error()`, `delay()`; `setupServer`, `server.use` pro Test, `resetHandlers`, `onUnhandledFrame: 'error'` (MSW 3; in MSW 2 `onUnhandledRequest`).
 27. **Angular: `HttpTestingController`** – framework-eigene Alternative für Code mit `HttpClient`: `provideHttpClient()` und `provideHttpClientTesting()`, Request mit `expectOne` erwarten, Antwort mit `flush` liefern, mit `verify` offene Requests prüfen. MSW funktioniert in Angular ebenfalls, weil es sowohl XHR als auch `fetch` abfängt – `HttpClient` nutzt je nach Konfiguration (`withFetch()`) das eine oder das andere. Quelle: Angular-Dokumentation «Testing HTTP requests».
 28. **Was ersetzte Antworten belegen – und was nicht** – Tabelle: Fehlerbehandlung ja; CORS, echte Header, API-Vertrag nein. Gegenmittel: Handler-Daten durch das Schema validieren, echte Requests im Browser beobachten.
 29. **Übung 5** – Verweis auf `EXERCISE.md`.

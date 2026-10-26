@@ -1,0 +1,59 @@
+@import "tailwindcss";
+/* Klassennamen in Anleitung und Notizen sollen kein CSS erzeugen (Grössenvergleich in Teil 3). */
+@source not "../*.md";
+
+/* Design Tokens aus dem bisherigen `:root`-Block von `styles.css`. */
+@theme {
+  /* Nur die eigenen Farben; die Standardpalette von Tailwind steht nicht zur Verfügung. */
+  --color-*: initial;
+  --color-primary: #0f766e;
+  --color-primary-hover: #115e59;
+  --color-text: #1f2933;
+  --color-muted: #52606d;
+  --color-border: #c5ced8;
+  --color-surface: #f4f6f8;
+  --color-danger: #b42318;
+  --color-white: #ffffff;
+
+  /* Grundabstand: `p-4` bedeutet `calc(var(--spacing) * 4)`. */
+  --spacing: 0.3rem;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+
+  /* Die Zeilenhöhe gehört zum Token, sonst setzt z. B. `text-sm` eine eigene (Stolperstein B). */
+  --text-*: initial;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.5;
+  --text-base: 1rem;
+  --text-base--line-height: 1.5;
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.5;
+  --text-xl: 1.75rem;
+  --text-xl--line-height: 1.5;
+
+  --font-sans: system-ui, sans-serif;
+
+  /* Breakpoint aus dem Design (800px); `md` von Tailwind liegt bei 48rem (Stolperstein E). */
+  --breakpoint-wide: 50rem;
+}
+
+/*
+ * Vertiefung 2: Stolperstein H mit Variante b (eigene Utilities) statt wiederholter Klassen.
+ * Zum Ausprobieren die Kommentarzeichen um den folgenden Block entfernen und im Markup die
+ * Klassenlisten der Buttons ersetzen: «Anmelden» und «Anmeldung drucken» durch
+ * `class="btn btn-primary"`, «Entwurf speichern» durch `class="btn btn-secondary"`.
+ */
+/*
+@utility btn {
+  @apply cursor-pointer justify-self-start rounded-sm px-4 py-2 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+@utility btn-primary {
+  @apply bg-primary text-white enabled:hover:bg-primary-hover;
+}
+
+@utility btn-secondary {
+  @apply bg-white text-primary inset-ring inset-ring-primary enabled:hover:bg-surface;
+}
+*/
