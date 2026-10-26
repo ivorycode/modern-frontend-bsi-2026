@@ -61,7 +61,7 @@ Im Network-Tab sehen Sie: Im Entwicklungsmodus liefert Vite jede Datei einzeln a
 Fügen Sie am Ende von `src/main.ts` diese Zeile ein:
 
 ```ts
-ageInput.value = 40;
+ageInput.value = 42;
 ```
 
 Lädt die Seite weiterhin? Führen Sie in einem zweiten Terminal aus:
