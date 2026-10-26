@@ -14,7 +14,7 @@ Jeder Schritt hat einen ausklappbaren Lösungshinweis. Versuchen Sie es zuerst s
 
 ## Teil 1: Was TypeScript nicht prüft
 
-Führen Sie alle Befehle im Ordner `Exercises/04-typescript-validierung` aus.
+Führen Sie alle folgenden Befehle im Ordner `Exercises/04-typescript-validierung` aus.
 
 ### Schritt 1.1: Projekt starten und Code lesen
 
