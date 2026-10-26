@@ -1,0 +1,14 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "demo": "node --watch --disable-warning=ExperimentalWarning demo.ts",
+    "demo:deno": "deno --watch demo.ts",
+    "demo:bun": "bun --watch demo.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
