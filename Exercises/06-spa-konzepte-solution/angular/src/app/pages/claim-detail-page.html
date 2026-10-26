@@ -1,0 +1,12 @@
+@if (claim.isLoading()) {
+  <p class="loading" role="status">Lädt …</p>
+} @else if (claim.hasValue()) {
+  <app-claim-details [claim]="claim.value()" />
+} @else if (isNotFound(claim.error())) {
+  <h1>Schadenfall nicht gefunden</h1>
+  <p>Es gibt keinen Schadenfall mit der ID {{ id() }}.</p>
+} @else if (claim.error()) {
+  <p class="error" role="alert">
+    {{ loadErrorMessage(claim.error(), "Der Schadenfall konnte nicht geladen werden") }}
+  </p>
+}

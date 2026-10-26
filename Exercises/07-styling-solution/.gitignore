@@ -1,0 +1,12 @@
+node_modules
+dist
+*.local
+
+# Playwright
+test-results
+playwright-report
+.playwright-cli
+
+# Referenzbilder der Screenshot-Tests: erzeugt jede Person selbst (Schritt 0),
+# weil sie von Betriebssystem und Schriftdarstellung abhängen.
+e2e/*-snapshots

@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kursanmeldung</title>
+  </head>
+  <body class="bg-white text-text">
+    <header class="group bg-primary text-white">
+      <div
+        class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3"
+      >
+        <a class="text-lg font-bold" href="/">Kursportal</a>
+        <button
+          class="cursor-pointer rounded-sm border border-white px-3 py-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white wide:hidden"
+          type="button"
+          aria-expanded="false"
+          aria-controls="site-nav"
+        >
+          Menü
+        </button>
+        <nav
+          class="hidden basis-full group-has-[[aria-expanded=true]]:block wide:block wide:basis-auto"
+          id="site-nav"
+          aria-label="Hauptnavigation"
+        >
+          <ul class="flex flex-col gap-1 wide:flex-row wide:gap-6">
+            <li><a class="block py-2 hover:underline" href="#kurse">Kurse</a></li>
+            <li>
+              <a
+                class="block py-2 hover:underline aria-[current=page]:font-bold"
+                href="#anmeldung"
+                aria-current="page"
+                >Anmeldung</a
+              >
+            </li>
+            <li><a class="block py-2 hover:underline" href="#kontakt">Kontakt</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-4 pt-6 pb-8" id="anmeldung">
+      <h1 class="text-xl leading-tight font-bold">Kursanmeldung</h1>
+      <p class="mt-2 mb-6 text-muted">
+        Melden Sie sich für einen Kurs an. Die Zusammenfassung zeigt Ihre Angaben, bevor Sie
+        absenden.
+      </p>
+
+      <div class="grid items-start gap-8 wide:grid-cols-[minmax(0,1fr)_350px]">
+        <form class="grid gap-4" novalidate>
+          <div class="group grid gap-1">
+            <label class="font-semibold group-has-[:user-invalid]:text-danger" for="name"
+              >Name</label
+            >
+            <input
+              class="w-full rounded-sm border border-border bg-white px-3 py-2 hover:border-muted focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary user-invalid:border-danger user-invalid:hover:border-danger"
+              id="name"
+              name="name"
+              required
+              autocomplete="name"
+            />
+            <p class="hidden text-sm text-danger group-has-[:user-invalid]:block">
+              Bitte geben Sie Ihren Namen an.
+            </p>
+          </div>
+
+          <div class="group grid gap-1">
+            <label class="font-semibold group-has-[:user-invalid]:text-danger" for="email"
+              >E-Mail</label
+            >
+            <input
+              class="w-full rounded-sm border border-border bg-white px-3 py-2 hover:border-muted focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary user-invalid:border-danger user-invalid:hover:border-danger"
+              id="email"
+              name="email"
+              type="email"
+              required
+              autocomplete="email"
+            />
+            <p class="hidden text-sm text-danger group-has-[:user-invalid]:block">
+              Bitte geben Sie eine gültige E-Mail-Adresse an.
+            </p>
+          </div>
+
+          <div class="group grid gap-1">
+            <label class="font-semibold group-has-[:user-invalid]:text-danger" for="course"
+              >Kurs</label
+            >
+            <select
+              class="w-full rounded-sm border border-border bg-white px-3 py-2 hover:border-muted focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary user-invalid:border-danger user-invalid:hover:border-danger"
+              id="course"
+              name="course"
+              required
+            >
+              <option value="">Bitte wählen …</option>
+              <option>Modern Frontend Development</option>
+              <option>TypeScript für Fortgeschrittene</option>
+              <option>Testing im Frontend</option>
+            </select>
+            <p class="hidden text-sm text-danger group-has-[:user-invalid]:block">
+              Bitte wählen Sie einen Kurs.
+            </p>
+          </div>
+
+          <fieldset class="flex flex-wrap gap-x-6 gap-y-2">
+            <legend class="mb-1 font-semibold">Teilnahme</legend>
+            <label class="flex cursor-pointer items-center gap-2 accent-primary">
+              <input type="radio" name="attendance" value="Vor Ort" checked />
+              Vor Ort
+            </label>
+            <label class="flex cursor-pointer items-center gap-2 accent-primary">
+              <input type="radio" name="attendance" value="Online" />
+              Online
+            </label>
+          </fieldset>
+
+          <div class="group grid gap-1">
+            <label class="font-semibold group-has-[:user-invalid]:text-danger" for="note"
+              >Bemerkung (optional)</label
+            >
+            <textarea
+              class="w-full rounded-sm border border-border bg-white px-3 py-2 hover:border-muted focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary user-invalid:border-danger user-invalid:hover:border-danger"
+              id="note"
+              name="note"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <label class="flex cursor-pointer items-center gap-2 accent-primary">
+            <input type="checkbox" name="consent" />
+            Ich akzeptiere die Teilnahmebedingungen.
+          </label>
+
+          <div class="flex flex-wrap items-center gap-4">
+            <button
+              class="cursor-pointer justify-self-start rounded-sm bg-primary px-4 py-2 font-semibold text-white enabled:hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
+              type="submit"
+              disabled
+            >
+              Anmelden
+            </button>
+            <button
+              class="cursor-pointer justify-self-start rounded-sm bg-white px-4 py-2 font-semibold text-primary inset-ring inset-ring-primary enabled:hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
+              type="button"
+            >
+              Entwurf speichern
+            </button>
+            <button
+              class="cursor-pointer text-primary underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              type="reset"
+            >
+              Zurücksetzen
+            </button>
+          </div>
+
+          <p class="font-semibold text-primary empty:hidden" role="status"></p>
+        </form>
+
+        <aside
+          class="@container grid gap-4 rounded-md bg-surface p-6"
+          aria-labelledby="summary-title"
+        >
+          <h2 class="text-lg leading-tight font-bold" id="summary-title">Ihre Anmeldung</h2>
+          <dl class="grid gap-3">
+            <div class="grid gap-1 @min-[30rem]:grid-cols-[8rem_1fr] @min-[30rem]:items-baseline">
+              <dt class="text-sm text-muted">Name</dt>
+              <dd class="wrap-anywhere" data-summary="name">–</dd>
+            </div>
+            <div class="grid gap-1 @min-[30rem]:grid-cols-[8rem_1fr] @min-[30rem]:items-baseline">
+              <dt class="text-sm text-muted">E-Mail</dt>
+              <dd class="wrap-anywhere" data-summary="email">–</dd>
+            </div>
+            <div class="grid gap-1 @min-[30rem]:grid-cols-[8rem_1fr] @min-[30rem]:items-baseline">
+              <dt class="text-sm text-muted">Kurs</dt>
+              <dd class="wrap-anywhere" data-summary="course">–</dd>
+            </div>
+            <div class="grid gap-1 @min-[30rem]:grid-cols-[8rem_1fr] @min-[30rem]:items-baseline">
+              <dt class="text-sm text-muted">Teilnahme</dt>
+              <dd class="wrap-anywhere" data-summary="attendance">Vor Ort</dd>
+            </div>
+          </dl>
+          <p class="font-semibold">Im Kurs enthalten:</p>
+          <ul class="-mt-2 list-disc pl-10">
+            <li>Kursunterlagen</li>
+            <li>Mittagessen</li>
+            <li>Teilnahmebestätigung</li>
+          </ul>
+          <button
+            class="cursor-pointer justify-self-start rounded-sm bg-primary px-4 py-2 font-semibold text-white enabled:hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
+            type="button"
+            data-action="print"
+          >
+            Anmeldung drucken
+          </button>
+        </aside>
+      </div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

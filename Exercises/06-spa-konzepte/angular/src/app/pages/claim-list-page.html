@@ -1,0 +1,55 @@
+<h1>Schadenfälle</h1>
+
+<div class="toolbar">
+  <label class="search">
+    Suche
+    <input
+      #search
+      type="search"
+      placeholder="Titel, Kunde oder Schadennummer"
+      [value]="query()"
+      (input)="onQueryInput(search.value)"
+    />
+  </label>
+  <button type="button" (click)="claims.reload()">Aktualisieren</button>
+</div>
+
+@if (claims.isLoading()) {
+  <p class="loading" role="status">Lädt …</p>
+} @else if (claims.error()) {
+  <p class="error" role="alert">
+    {{ loadErrorMessage(claims.error(), "Die Schadenfälle konnten nicht geladen werden") }}
+  </p>
+} @else if (claims.hasValue()) {
+  <p class="count">{{ filteredClaims().length }} von {{ claims.value().length }} Schadenfällen</p>
+  @if (filteredClaims().length === 0) {
+    <p class="hint">Keine Schadenfälle gefunden.</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Nummer</th>
+          <th>Titel</th>
+          <th>Kunde</th>
+          <th>Status</th>
+          <th>Gemeldet am</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (claim of filteredClaims(); track claim.id) {
+          <tr>
+            <td>{{ claim.number }}</td>
+            <td>{{ claim.title }}</td>
+            <td>{{ claim.customer }}</td>
+            <td>
+              <span class="status" [class]="'status-' + claim.status">{{
+                statusLabels[claim.status]
+              }}</span>
+            </td>
+            <td>{{ formatDate(claim.reportedOn) }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+}

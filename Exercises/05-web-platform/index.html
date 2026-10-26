@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Geräteverleih</title>
+  </head>
+  <body>
+    <main>
+      <h1>Geräteverleih</h1>
+      <p class="intro">
+        Die Seite lädt die Geräte von der lokalen API unter <code>http://localhost:3005</code>. Über
+        das Szenario lassen sich verschiedene Antworten der API auslösen.
+      </p>
+
+      <label class="source">
+        Szenario
+        <select name="source">
+          <option value="" disabled selected>Bitte wählen …</option>
+          <option value="/api/devices">Alle Geräte</option>
+          <option value="/api/devices?scenario=empty">Leere Liste</option>
+          <option value="/api/geraete">Falscher Pfad</option>
+          <option value="/api/devices?scenario=server-error">Serverfehler</option>
+          <option value="/api/devices?scenario=invalid-json">Abgeschnittene Antwort</option>
+          <option value="/api/devices?scenario=invalid-data">Ungültige Daten</option>
+          <option value="/api/devices?scenario=network-error">Verbindungsabbruch</option>
+          <option value="/api/devices?scenario=slow">Langsame Antwort</option>
+          <option value="/api/devices/archived">Ausgemusterte Geräte</option>
+        </select>
+      </label>
+
+      <section class="output"></section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -7,7 +7,7 @@ The following steps are needed for the setup. Below are detailed informations fo
 
 1. Install Git
 2. Install NodeJS
-3. Install Chrome
+3. Install Google Chrome
 4. Install an editor. Recommended: *IntelliJ Ultimate*, *Rider* or *WebStorm* or *Visual Studio Code*
 5. Clone the repo: `https://github.com/ivorycode/modern-frontend-bsi-2026`
 6. In the repository in `01-Starter/vanilla-vite` run `npm install` and then `npm run dev`
@@ -50,22 +50,22 @@ Check:
 Node and NPM are the fundament for the JavaScript toolchain.  
 The Node installer can be downloaded here: <https://nodejs.org/>
 
-The exercises require Node.js >= 24.15.0  
+Install a current LTS version of Node.js: **Node 24 (24.11 or newer)**. Node 22 (22.18 or newer) and Node 26 also work; the odd-numbered versions 23 and 25 are not supported by the test tools.  
 
 Check:
 
 ```
 > node --version
-v26.12.0
+v24.11.0
 > npm --version
-11.17.0
+11.6.1
 ```
 
 
 
 ### Browser
 
-A recent modern browser must be available. Recommended: Chrome.
+A recent version of [Google Chrome](https://www.google.com/chrome/) must be installed. The browser tests in the course run in your installed Chrome.
 
 
 

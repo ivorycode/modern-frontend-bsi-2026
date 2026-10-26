@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Einkaufslisten</title>
+  </head>
+  <body>
+    <main>
+      <h1>Einkaufslisten</h1>
+
+      <div class="lists">
+        <section class="shopping-list" aria-labelledby="weekly-title">
+          <h2 id="weekly-title">Wocheneinkauf</h2>
+          <form>
+            <label class="name">
+              Artikel
+              <input name="name" type="text" autocomplete="off" required />
+            </label>
+            <label class="amount">
+              Menge
+              <input name="quantity" type="number" min="1" step="1" value="1" required />
+            </label>
+            <button type="submit">Hinzufügen</button>
+          </form>
+          <ul></ul>
+          <footer>
+            <span class="summary"></span>
+            <button type="button" class="undo">Rückgängig</button>
+          </footer>
+        </section>
+
+        <section class="shopping-list" aria-labelledby="party-title">
+          <h2 id="party-title">Party</h2>
+          <form>
+            <label class="name">
+              Artikel
+              <input name="name" type="text" autocomplete="off" required />
+            </label>
+            <label class="amount">
+              Menge
+              <input name="quantity" type="number" min="1" step="1" value="1" required />
+            </label>
+            <button type="submit">Hinzufügen</button>
+          </form>
+          <ul></ul>
+          <footer>
+            <span class="summary"></span>
+            <button type="button" class="undo">Rückgängig</button>
+          </footer>
+        </section>
+      </div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

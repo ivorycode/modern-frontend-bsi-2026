@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "Anna Meier",
+    "email": "anna.meier@example.ch",
+    "status": "confirmed",
+    "seat": 3
+  },
+  { "id": 2, "name": "Luca Rossi", "email": "luca.rossi@example.ch", "status": "pending" },
+  {
+    "id": 3,
+    "name": "Sophie Keller",
+    "email": "sophie.keller@example.ch",
+    "status": "confirmed",
+    "seat": 1
+  },
+  {
+    "id": 4,
+    "name": "Daniel Brunner",
+    "email": "daniel.brunner@example.ch",
+    "status": "cancelled"
+  },
+  {
+    "id": 5,
+    "name": "Elena Steiner",
+    "email": "elena.steiner@example.ch",
+    "status": "confirmed",
+    "seat": 2
+  }
+]

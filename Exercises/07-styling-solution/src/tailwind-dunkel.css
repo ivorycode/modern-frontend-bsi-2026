@@ -1,0 +1,26 @@
+/*
+ * Vertiefung 1: Dunkles Farbschema über die Tokens.
+ *
+ * Aktivieren: In `src/main.ts` diese Datei statt `./tailwind.css` importieren. Das Markup bleibt
+ * unverändert; nur die Werte der Farb-Tokens hängen jetzt vom Farbschema ab. Der erste Wert in
+ * `light-dark()` ist der bisherige Wert.
+ */
+@import "./tailwind.css";
+
+@theme {
+  --color-primary: light-dark(#0f766e, #5eead4);
+  --color-primary-hover: light-dark(#115e59, #99f6e4);
+  --color-text: light-dark(#1f2933, #e4e7eb);
+  --color-muted: light-dark(#52606d, #9aa5b1);
+  --color-border: light-dark(#c5ced8, #52606d);
+  --color-surface: light-dark(#f4f6f8, #1f2933);
+  --color-danger: light-dark(#b42318, #fda29b);
+  /* `white` ist Seitenhintergrund und Schrift auf der Primärfarbe; im dunklen Schema ist es dunkel. */
+  --color-white: light-dark(#ffffff, #12181f);
+}
+
+@layer base {
+  :root {
+    color-scheme: light dark;
+  }
+}
