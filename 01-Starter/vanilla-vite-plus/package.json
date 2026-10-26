@@ -9,14 +9,14 @@
     "preview": "vp preview"
   },
   "devDependencies": {
-    "typescript": "~6.0.2",
+    "typescript": "~6.0.3",
     "vite": "catalog:",
     "vite-plus": "catalog:"
   },
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "12.11.2",
+      "version": "12.15.0",
       "onFail": "download"
     }
   }
