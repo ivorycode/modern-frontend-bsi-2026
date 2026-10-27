@@ -3,7 +3,7 @@ import { defineConfig } from "@playwright/test";
 export default defineConfig({
   testDir: "e2e",
   use: {
-    baseURL: "http://localhost:5181",
+    baseURL: "http://localhost:5281",
     // Das installierte Chrome verwenden; kein Browser-Download nötig.
     channel: "chrome",
     trace: "retain-on-failure",
@@ -12,12 +12,12 @@ export default defineConfig({
   webServer: [
     {
       command: "npm run api",
-      url: "http://localhost:3181/api/claims",
+      url: "http://localhost:3281/api/claims",
       reuseExistingServer: true,
     },
     {
       command: "npm run dev",
-      url: "http://localhost:5181",
+      url: "http://localhost:5281",
       reuseExistingServer: true,
     },
   ],

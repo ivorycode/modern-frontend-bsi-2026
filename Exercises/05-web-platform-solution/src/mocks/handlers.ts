@@ -2,7 +2,7 @@ import { http, HttpResponse } from "msw";
 import type { Device } from "../device.ts";
 
 /** Basisadresse der API, wie sie die Seite verwendet. */
-export const API_BASE_URL = "http://localhost:3005";
+export const API_BASE_URL = "http://localhost:3105";
 export const DEVICES_URL = `${API_BASE_URL}/api/devices`;
 
 export const devices: Device[] = [

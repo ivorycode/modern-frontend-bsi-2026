@@ -6,7 +6,7 @@
 
 import { createServer, type ServerResponse } from "node:http";
 
-const PORT = 3003;
+const PORT = 3103;
 
 const WORDS = ["The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog"];
 

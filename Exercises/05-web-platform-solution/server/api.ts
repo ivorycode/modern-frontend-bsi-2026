@@ -6,9 +6,9 @@ import { createServer, type IncomingMessage, type ServerResponse } from "node:ht
 import { z } from "zod";
 import { newDeviceSchema, type Device } from "../src/device.ts";
 
-const PORT = 3005;
+const PORT = 3105;
 /** Origin der Seite (Vite-Entwicklungsserver), die diese API verwenden darf. */
-const ALLOWED_ORIGIN = "http://localhost:5177";
+const ALLOWED_ORIGIN = "http://localhost:5277";
 
 const devices: Device[] = [
   { id: 1, name: "ThinkPad T14", category: "laptop", available: true },

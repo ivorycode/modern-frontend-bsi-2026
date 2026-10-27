@@ -63,7 +63,7 @@
           },
           "defaultConfiguration": "development",
           "options": {
-            "port": 5183,
+            "port": 5283,
             "proxyConfig": "proxy.conf.json"
           }
         },

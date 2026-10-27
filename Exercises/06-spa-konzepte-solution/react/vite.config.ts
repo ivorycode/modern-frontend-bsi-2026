@@ -5,16 +5,16 @@ export default defineConfig({
   plugins: lazyPlugins(() => [react()]),
   // Eigener Port, damit die Varianten nebeneinander laufen können.
   // Requests auf /api leitet der Entwicklungsserver an die Schadenfall-API weiter
-  // (`npm run api`, Port 3181). Für den Browser bleibt alles unter einem Origin.
+  // (`npm run api`, Port 3281). Für den Browser bleibt alles unter einem Origin.
   server: {
-    port: 5181,
+    port: 5281,
     strictPort: true,
-    proxy: { "/api": "http://localhost:3181" },
+    proxy: { "/api": "http://localhost:3281" },
   },
   preview: {
-    port: 5181,
+    port: 5281,
     strictPort: true,
-    proxy: { "/api": "http://localhost:3181" },
+    proxy: { "/api": "http://localhost:3281" },
   },
   test: {
     // Nur Unit-Tests; die Playwright-Tests in e2e/ laufen mit `npm run e2e`.

@@ -7,7 +7,7 @@ npm install
 npm run dev
 ```
 
-Seite: `http://localhost:5174/`
+Seite: `http://localhost:5274/`
 
 Prüfungen: `npm run check`, `npm test` und `npm run e2e`.
 

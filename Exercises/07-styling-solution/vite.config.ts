@@ -5,7 +5,7 @@ import { defineConfig } from "vite-plus";
 export default defineConfig({
   plugins: [tailwindcss()],
   // Eigener Port, damit die Übung neben anderen Übungen laufen kann.
-  server: { port: 5178, strictPort: true },
+  server: { port: 5278, strictPort: true },
   build: {
     rollupOptions: {
       // Zwei Seiten: die umzustellende Seite und die unveränderte CSS-Fassung zum Vergleich.

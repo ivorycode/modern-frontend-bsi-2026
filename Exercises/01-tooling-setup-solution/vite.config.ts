@@ -1,6 +1,8 @@
 import { defineConfig } from "vite-plus";
 
 export default defineConfig({
+  // Fester Port, damit die Musterlösung parallel zur Übung (Port 5173) laufen kann.
+  server: { port: 5273, strictPort: true },
   test: {
     // Nur Unit-Tests; die Playwright-Tests in e2e/ laufen mit `npm run e2e`.
     include: ["src/**/*.test.ts"],

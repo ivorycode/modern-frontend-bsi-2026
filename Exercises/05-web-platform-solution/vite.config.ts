@@ -2,8 +2,8 @@ import { defineConfig } from "vite-plus";
 
 export default defineConfig({
   // Eigener Port, damit die Übung neben anderen Übungen laufen kann.
-  // Die Geräte-API (`npm run api`) läuft separat auf Port 3005.
-  server: { port: 5177, strictPort: true },
+  // Die Geräte-API (`npm run api`) läuft separat auf Port 3105.
+  server: { port: 5277, strictPort: true },
   test: {
     // Nur Unit-Tests; die Playwright-Tests in e2e/ laufen mit `npm run e2e`.
     include: ["src/**/*.test.ts"],

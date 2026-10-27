@@ -4,11 +4,11 @@ Aufgabe: [Übung 6, Angular](../../06-spa-konzepte/angular/README.md)
 
 ```sh
 npm install
-npm run api    # Terminal 1: API auf http://localhost:3183/
+npm run api    # Terminal 1: API auf http://localhost:3283/
 npm run dev    # Terminal 2
 ```
 
-Seite: `http://localhost:5183/`
+Seite: `http://localhost:5283/`
 
 Prüfungen: `npm run check`, `npm test` und `npm run e2e`. `npm run e2e` startet API und Entwicklungsserver selbst.
 

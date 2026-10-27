@@ -9,7 +9,7 @@
 
 import { createServer, type ServerResponse } from "node:http";
 
-const PORT = 3182;
+const PORT = 3282;
 const DELAY_MS = 600;
 
 type ClaimStatus = "offen" | "in-pruefung" | "abgeschlossen";

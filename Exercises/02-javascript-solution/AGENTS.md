@@ -7,7 +7,7 @@ Kleines Vite+-Projekt mit TypeScript ohne Framework. Fachlogik in `src/shopping-
 Alle Werkzeuge sind lokal installiert; kein globales `vp` verwenden oder voraussetzen.
 
 - `npm ci` – Abhängigkeiten installieren
-- `npm run dev` – Entwicklungsserver auf `http://localhost:5174/` (fester Port)
+- `npm run dev` – Entwicklungsserver auf `http://localhost:5274/` (fester Port)
 - `npm run check` – Formatierung, Linting und Typprüfung; `npx vp check --fix` korrigiert Formatierung
 - `npm test` – Unit-Tests (Vitest, `src/**/*.test.ts`); Imports aus `vite-plus/test`
 - `npm run e2e` – Playwright-Tests in `e2e/` im installierten Chrome
@@ -16,7 +16,7 @@ Alle Werkzeuge sind lokal installiert; kein globales `vp` verwenden oder vorauss
 
 Die laufende Seite mit der Playwright CLI öffnen und bedienen, nicht nur aus dem Code schliessen:
 
-- `npx playwright cli open --browser=chrome http://localhost:5174/`
+- `npx playwright cli open --browser=chrome http://localhost:5274/`
 - `npx playwright cli snapshot`, `fill`, `click`, `console error`, `screenshot`
 - `npx playwright cli close` am Ende
 

@@ -7,7 +7,7 @@ npm install
 npm run dev
 ```
 
-Seiten: `http://localhost:5178/` (Tailwind) und `http://localhost:5178/css-referenz/` (CSS-Referenz)
+Seiten: `http://localhost:5278/` (Tailwind) und `http://localhost:5278/css-referenz/` (CSS-Referenz)
 
 Prüfungen: `npm run check`, `npm test` und `npm run e2e`.
 

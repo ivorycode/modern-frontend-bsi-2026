@@ -6,7 +6,7 @@ export default defineConfig({
   timeout: 30_000,
   expect: { timeout: 15_000 },
   use: {
-    baseURL: "http://localhost:5175",
+    baseURL: "http://localhost:5275",
     // Das installierte Chrome verwenden; kein Browser-Download nötig.
     channel: "chrome",
     trace: "retain-on-failure",
@@ -15,12 +15,12 @@ export default defineConfig({
   webServer: [
     {
       command: "npm run api",
-      url: "http://localhost:3003/api/words",
+      url: "http://localhost:3103/api/words",
       reuseExistingServer: true,
     },
     {
       command: "npm run dev",
-      url: "http://localhost:5175",
+      url: "http://localhost:5275",
       reuseExistingServer: true,
     },
   ],

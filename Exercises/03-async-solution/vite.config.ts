@@ -4,11 +4,11 @@ import { defineConfig } from "vite-plus";
 export default defineConfig({
   // Eigener Port, damit die Übung neben anderen Übungen laufen kann.
   // Requests auf /api leitet der Entwicklungsserver an die Wort-API weiter
-  // (`npm run api`, Port 3003). Für den Browser bleibt alles unter einem Origin.
+  // (`npm run api`, Port 3103). Für den Browser bleibt alles unter einem Origin.
   server: {
-    port: 5175,
+    port: 5275,
     strictPort: true,
-    proxy: { "/api": "http://localhost:3003" },
+    proxy: { "/api": "http://localhost:3103" },
   },
   // RxJS beim Start vorbereiten, damit die Suchseite nicht beim ersten Aufruf neu lädt.
   optimizeDeps: { include: ["rxjs"] },

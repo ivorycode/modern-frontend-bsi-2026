@@ -4,11 +4,11 @@ Aufgabe: [Übung 6, Vue](../../06-spa-konzepte/vue/README.md)
 
 ```sh
 npm install
-npm run api    # Terminal 1: API auf http://localhost:3182/
+npm run api    # Terminal 1: API auf http://localhost:3282/
 npm run dev    # Terminal 2
 ```
 
-Seite: `http://localhost:5182/`
+Seite: `http://localhost:5282/`
 
 Prüfungen: `npm run check`, `npm test` und `npm run e2e`. `npm run e2e` startet API und Entwicklungsserver selbst.
 

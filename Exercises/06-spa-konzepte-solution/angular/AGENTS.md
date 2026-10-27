@@ -1,6 +1,6 @@
 # Übung 6 (Angular): Schadenfälle
 
-Kleine SPA mit Angular 22 (Standalone Components, Signals, zoneless), Angular Router und Angular CLI; kein Vite+. Sie lädt Schadenfälle von einer lokalen API in `server/api.ts` (Node.js ohne Framework, Port 3183, Antworten mit 600 ms Verzögerung). Der Entwicklungsserver (`ng serve`, Port 5183) leitet `/api` per Proxy (`proxy.conf.json`) an die API weiter; die Seite verwendet relative URLs. Serverzustand mit `httpResource` in `src/app/claims/claim-resources.ts`, reine Filterfunktion in `src/app/claims/filter-claims.ts`, Seiten in `src/app/pages/`, Routen in `src/app/app.routes.ts`. `withComponentInputBinding()` bindet Routen- und Query-Parameter an Inputs. Aufgabe und Lernziele stehen in `README.md`.
+Kleine SPA mit Angular 22 (Standalone Components, Signals, zoneless), Angular Router und Angular CLI; kein Vite+. Sie lädt Schadenfälle von einer lokalen API in `server/api.ts` (Node.js ohne Framework, Port 3283, Antworten mit 600 ms Verzögerung). Der Entwicklungsserver (`ng serve`, Port 5283) leitet `/api` per Proxy (`proxy.conf.json`) an die API weiter; die Seite verwendet relative URLs. Serverzustand mit `httpResource` in `src/app/claims/claim-resources.ts`, reine Filterfunktion in `src/app/claims/filter-claims.ts`, Seiten in `src/app/pages/`, Routen in `src/app/app.routes.ts`. `withComponentInputBinding()` bindet Routen- und Query-Parameter an Inputs. Aufgabe und Lernziele stehen in `README.md`.
 
 Dieselbe Übung existiert als eigenständiges Projekt in `../react` und `../vue`. Es gibt keinen gemeinsamen Code; nichts aus anderen Ordnern importieren oder verlinken.
 
@@ -9,8 +9,8 @@ Dieselbe Übung existiert als eigenständiges Projekt in `../react` und `../vue`
 Alle Werkzeuge sind lokal installiert; keine globale Angular CLI verwenden oder voraussetzen (`npx ng …`).
 
 - `npm ci` – Abhängigkeiten installieren
-- `npm run api` – Schadenfall-API auf `http://localhost:3183/` (startet bei Änderungen neu)
-- `npm run dev` – Entwicklungsserver auf `http://localhost:5183/` (fester Port, Proxy für `/api`)
+- `npm run api` – Schadenfall-API auf `http://localhost:3283/` (startet bei Änderungen neu)
+- `npm run dev` – Entwicklungsserver auf `http://localhost:5283/` (fester Port, Proxy für `/api`)
 - `npm run check` – Prettier (`--check`), `ng lint` (angular-eslint) und `ng build` als Typprüfung der Templates; `npx prettier --write .` korrigiert Formatierung
 - `npm test` – Unit-Tests mit `ng test` (Vitest, `src/**/*.spec.ts`); Imports aus `vitest`
 - `npm run e2e` – Playwright-Tests in `e2e/` im installierten Chrome; startet API und Entwicklungsserver bei Bedarf
@@ -19,7 +19,7 @@ Alle Werkzeuge sind lokal installiert; keine globale Angular CLI verwenden oder 
 
 Die laufende Seite mit der Playwright CLI öffnen und bedienen, nicht nur aus dem Code schliessen. API und Entwicklungsserver müssen laufen.
 
-- `npx playwright cli open --browser=chrome http://localhost:5183/`
+- `npx playwright cli open --browser=chrome http://localhost:5283/`
 - `npx playwright cli snapshot`, `fill`, `click`, `go-back`, `console error`, `requests`, `screenshot`
 - `npx playwright cli close` am Ende
 

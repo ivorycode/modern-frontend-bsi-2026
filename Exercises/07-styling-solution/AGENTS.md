@@ -7,7 +7,7 @@ Kleines Vite+-Projekt mit TypeScript ohne Framework. Die Seite `index.html` ist 
 Alle Werkzeuge sind lokal installiert; kein globales `vp` verwenden oder voraussetzen.
 
 - `npm ci` – Abhängigkeiten installieren
-- `npm run dev` – Entwicklungsserver auf `http://localhost:5178/`; CSS-Referenz unter `/css-referenz/`
+- `npm run dev` – Entwicklungsserver auf `http://localhost:5278/`; CSS-Referenz unter `/css-referenz/`
 - `npm run check` – Formatierung, Linting und Typprüfung; `npx vp check --fix` korrigiert Formatierung
 - `npm run e2e` – Playwright-Tests in `e2e/` im installierten Chrome, drei Viewports (`mobil` 375 px, `grenzfall` 784 px, `desktop` 1280 px); startet den Entwicklungsserver bei Bedarf
 - `npm run e2e -- --update-snapshots` – Referenzbilder neu erzeugen; nur auf ausdrücklichen Wunsch
@@ -17,7 +17,7 @@ Alle Werkzeuge sind lokal installiert; kein globales `vp` verwenden oder vorauss
 
 Die laufende Seite mit der Playwright CLI öffnen und Layout sowie Zustände selbst ansehen, nicht nur aus dem Code schliessen. Der Entwicklungsserver muss laufen.
 
-- `npx playwright cli open --browser=chrome http://localhost:5178/`
+- `npx playwright cli open --browser=chrome http://localhost:5278/`
 - `npx playwright cli resize`, `snapshot`, `click`, `hover`, `screenshot`
 - `npx playwright cli close` am Ende
 
