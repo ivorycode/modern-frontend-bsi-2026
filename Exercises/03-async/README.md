@@ -94,7 +94,7 @@ Lesen Sie `createFakeFetchWord` und `flushPromises` in `src/test-helpers.ts` und
 
 `fake.fetchWord(3)` gibt ein Promise zurück, das offen bleibt, bis der Test `fake.respond(3, "fox")` oder `fake.fail(3, error)` aufruft. `fake.requestedIndexes()` liefert die angefragten Indizes in der Reihenfolge der Aufrufe. Der Test bestimmt also selbst, **wann** und **in welcher Reihenfolge** Antworten kommen – ohne Netzwerk und ohne Zufall.
 
-`Promise.withResolvers()` erzeugt ein Promise und liefert `resolve` und `reject` dazu, ähnlich wie ein `CompletableFuture`, das man später mit `complete()` oder `completeExceptionally()` abschliesst.
+`Promise.withResolvers()` erzeugt ein Promise und liefert `resolve` und `reject` dazu, ähnlich wie in Java ein `CompletableFuture`, das man später mit `complete()` oder `completeExceptionally()` abschliesst.
 
 JavaScript läuft im Browser in einem einzigen Thread mit einer Event Loop. Code nach einem `await` läuft nicht sofort weiter, sondern als **Microtask** in einer Warteschlange. `flushPromises` plant mit `setTimeout(…, 0)` eine normale Task ein. Diese läuft erst, wenn alle Microtasks abgearbeitet sind. Danach ist aller Code weitergelaufen, der nicht auf eine offene Antwort wartet. Der Test wartet also nicht auf eine Uhr, sondern auf einen Zustand.
 
@@ -118,7 +118,7 @@ export async function loadSentenceParallel(fetchWord: FetchWord): Promise<string
 }
 ```
 
-`Array.from({ length: 9 }, (_, index) => …)` erzeugt ein Array mit neun Einträgen, ähnlich wie `IntStream.range(0, 9).mapToObj(…)`. Alle neun Aufrufe von `fetchWord` starten sofort. `Promise.all` wird erfüllt, wenn alle Promises erfüllt sind, und liefert ein Array der Ergebnisse (vergleichbar mit `CompletableFuture.allOf` plus Einsammeln der Resultate).
+`Array.from({ length: 9 }, (_, index) => …)` erzeugt ein Array mit neun Einträgen, ähnlich wie in Java `IntStream.range(0, 9).mapToObj(…)`. Alle neun Aufrufe von `fetchWord` starten sofort. `Promise.all` wird erfüllt, wenn alle Promises erfüllt sind, und liefert ein Array der Ergebnisse (in Java vergleichbar mit `CompletableFuture.allOf` plus Einsammeln der Resultate).
 
 </details>
 
@@ -291,7 +291,7 @@ Uncaught (in promise) Error: Wort 5 konnte nicht geladen werden (HTTP 500).
 
 Parallel gehen alle neun Requests raus; Wort 5 antwortet mit 500. Sequenziell erscheint «The quick brown fox», dann bricht das Laden ab.
 
-Der Weg des Fehlers: `fetchWord` lehnt ab → `Promise.all` bzw. `await` in der Schleife lehnt ab → `loadSentence…` lehnt ab → `await loadSentence()` in `load` wirft → `setLoading(false)` läuft nie. Niemand wartet auf das Promise des Click-Handlers. Der Browser meldet deshalb eine **unbehandelte Rejection** – vergleichbar mit einer Exception in einem `CompletableFuture`, die niemand abfragt.
+Der Weg des Fehlers: `fetchWord` lehnt ab → `Promise.all` bzw. `await` in der Schleife lehnt ab → `loadSentence…` lehnt ab → `await loadSentence()` in `load` wirft → `setLoading(false)` läuft nie. Niemand wartet auf das Promise des Click-Handlers. Der Browser meldet deshalb eine **unbehandelte Rejection** – vergleichbar mit einer Exception in einem `CompletableFuture` in Java, die niemand abfragt.
 
 </details>
 

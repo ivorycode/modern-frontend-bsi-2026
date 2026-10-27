@@ -103,7 +103,7 @@ Bei der abgeschnittenen Antwort scheitert erst `response.json()`. Die ungültige
 | Body ist kein JSON                     | `invalid-json` | «Die Antwort des Servers ist kein gültiges JSON.»    |
 | JSON passt nicht zu `deviceListSchema` | `invalid-data` | «Die Antwort des Servers enthält ungültige Daten: …» |
 
-Geben Sie den ursprünglichen Fehler als `cause` weiter (wie `new RuntimeException(message, cause)`). Verwenden Sie `async`/`await` statt `.then`.
+Geben Sie den ursprünglichen Fehler als `cause` weiter (wie in Java `new RuntimeException(message, cause)`). Verwenden Sie `async`/`await` statt `.then`.
 
 In welcher Reihenfolge müssen die Prüfungen stehen, und warum?
 
