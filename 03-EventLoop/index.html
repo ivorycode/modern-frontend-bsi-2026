@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8"/>
+<head>
+    <title></title>
+</head>
+<body>
+<img src="spinner.gif"/>
+
+<div id="container"></div>
+
+<button id="myButton">Click Me!</button>
+<br>
+
+<script>
+  console.log("Hello from first script: " + new Date());
+  document.getElementById("container").innerHTML = "Hello from first script: " + new Date();
+</script>
+
+<script>
+
+
+  // doCalculations(); // Nothing is rendered until finished!
+  setTimeout(doCalculations, 3000);
+
+  document.getElementById('myButton').addEventListener('click', () => {alert('Hello World!')})
+
+  // CALL NON BLOCKING ALTERNATIVES
+  // setTimeout(doCalculationsScheduled, 1000);
+  // setTimeout(doCalculationsInWebWorker, 1000);
+
+
+  function doCalculations() {
+    var i, start, end, res, p;
+
+    for (i = 30; i < 43; i++) {
+      start = new Date();
+      res = fibonacci(i);
+      end = new Date();
+      console.log("Input: " + i + " Result: " + res + ", Time: " + (end - start));
+    }
+    p = document.createElement('p');
+    p.innerHTML = "Hello from second script: " + new Date();
+    document.getElementById("container").appendChild(p);
+  }
+
+
+  // NON BLOCKING ALTERNATIVES
+  // function doCalculationsScheduled() {
+  //   var i = 30;
+  //
+  //   calculateCurrentAndScheduleNext();
+  //
+  //   function calculateCurrentAndScheduleNext() {
+  //
+  //     var start = new Date();
+  //     var res = fibonacci(i);
+  //     var end = new Date();
+  //     console.log("Input: " + i + " Result: " + res + ", Time: " + (end - start));
+  //     i++;
+  //     if (i < 45) {
+  //       setTimeout(calculateCurrentAndScheduleNext, 0);
+  //     }
+  //   }
+  // }
+  //
+  // function doCalculationsInWebWorker() {
+  //   var i, start, end, res, p;
+  //
+  //   var worker;
+  //   for (i = 30; i < 45; i++) {
+  //       worker = new Worker('worker.js');
+  //       worker.postMessage({number: i});
+  //       worker.onmessage = function(result){console.log("Result: ", result.data)};
+  //   }
+  //   p = document.createElement('p');
+  //   p.innerHTML = "Hello from second script: " + new Date();
+  //   document.getElementById("container").appendChild(p);
+  // }
+
+
+  function fibonacci(n) {
+    if (n < 2)
+      return 1;
+    else
+      return fibonacci(n - 2) + fibonacci(n - 1);
+  }
+
+
+</script>
+Hello World!
+</body>
+</html>
