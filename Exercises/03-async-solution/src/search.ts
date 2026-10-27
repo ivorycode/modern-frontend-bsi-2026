@@ -20,7 +20,8 @@ export function createSearch(
     // Die vorherige Suche abbrechen, damit ihre Antwort die neuere nicht überschreibt.
     controller?.abort();
     controller = new AbortController();
-    // Lokal merken: Im catch gehört `controller` womöglich schon zur nächsten Suche.
+    // Signal für diesen Aufruf lokal speichern; es bleibt über das await hinweg erhalten.
+    // Im catch kann der geteilte `controller` bereits zur nächsten Suche gehören.
     const signal = controller.signal;
 
     try {
