@@ -2,7 +2,8 @@
 // auflöst oder ablehnt. So bestimmt der Test Zeitpunkt und Reihenfolge der
 // Antworten, ohne Netzwerk und ohne echte Wartezeiten.
 
-import type { SearchTerms } from "./search-api.ts";
+import { Observable } from "rxjs";
+import type { SearchTerms, SearchTerms$ } from "./search-api.ts";
 import type { FetchWord } from "./word-api.ts";
 
 /**
@@ -88,5 +89,62 @@ export function createFakeSearchTerms() {
     respond: (query: string, results: string[]) => request(query).resolve(results),
     /** Lässt die Suche nach diesem Begriff fehlschlagen. */
     fail: (query: string, error: Error) => request(query).reject(error),
+  };
+}
+
+interface PendingSearch$ {
+  query: string;
+  aborted: boolean;
+  respond: (results: string[]) => void;
+  fail: (error: Error) => void;
+}
+
+/**
+ * Attrappe für `searchTerms$`. Wie bei `fromFetch` beginnt die Suche erst beim
+ * Anmelden; wer sich abmeldet, bevor die Antwort da ist, bricht sie ab.
+ * `respond` und `fail` liefern sofort, ohne Promise; `flushPromises` ist nicht nötig.
+ */
+export function createFakeSearchTerms$() {
+  const requests: PendingSearch$[] = [];
+
+  const searchTerms$: SearchTerms$ = (query) =>
+    new Observable<string[]>((subscriber) => {
+      let settled = false;
+      const request: PendingSearch$ = {
+        query,
+        aborted: false,
+        respond: (results) => {
+          settled = true;
+          subscriber.next(results);
+          subscriber.complete();
+        },
+        fail: (error) => {
+          settled = true;
+          subscriber.error(error);
+        },
+      };
+      requests.push(request);
+      // Teardown: läuft beim Abmelden, aber auch nach complete und error.
+      return () => {
+        if (!settled) request.aborted = true;
+      };
+    });
+
+  function request(query: string): PendingSearch$ {
+    const pending = requests.findLast((request) => request.query === query);
+    if (!pending) throw new Error(`Nach «${query}» wurde (noch) nicht gesucht.`);
+    return pending;
+  }
+
+  return {
+    searchTerms$,
+    /** Suchbegriffe in der Reihenfolge der Anfragen. */
+    queries: () => requests.map((request) => request.query),
+    /** Wurde die Suche nach diesem Begriff abgebrochen? */
+    isAborted: (query: string) => request(query).aborted,
+    /** Beantwortet die Suche nach diesem Begriff. */
+    respond: (query: string, results: string[]) => request(query).respond(results),
+    /** Lässt die Suche nach diesem Begriff fehlschlagen. */
+    fail: (query: string, error: Error) => request(query).fail(error),
   };
 }

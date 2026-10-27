@@ -1,34 +1,27 @@
-import { Observable, switchMap } from "rxjs";
-import type { SearchTerms } from "./search-api.ts";
+import { catchError, map, of, switchMap, type Observable } from "rxjs";
+import type { SearchTerms$ } from "./search-api.ts";
 
-export interface SearchResult {
-  query: string;
-  results: string[];
-}
+/** Treffer zu einem Suchbegriff oder der Fehler, an dem die Suche gescheitert ist. */
+export type SearchResult = { query: string; results: string[] } | { query: string; error: unknown };
 
 /**
  * Macht aus einem Strom von Suchbegriffen einen Strom von Suchresultaten.
- * Vertiefung 2: Veraltete Antworten dürfen kein neueres Resultat überschreiben.
+ * Vertiefung 2: Veraltete Antworten dürfen kein neueres Resultat überschreiben,
+ * und nach einem Fehler muss die Suche weiter funktionieren.
  */
 export function searchResults(
   queries: Observable<string>,
-  searchTerms: SearchTerms,
+  searchTerms$: SearchTerms$,
 ): Observable<SearchResult> {
   return queries.pipe(
-    switchMap(
-      (query) =>
-        new Observable<SearchResult>((subscriber) => {
-          const controller = new AbortController();
-          searchTerms(query, controller.signal).then(
-            (results) => {
-              subscriber.next({ query, results });
-              subscriber.complete();
-            },
-            (error) => subscriber.error(error),
-          );
-          // Läuft, wenn switchMap auf einen neuen Suchbegriff wechselt.
-          return () => controller.abort();
-        }),
+    // switchMap meldet sich bei jedem neuen Suchbegriff von der vorherigen Suche ab;
+    // fromFetch bricht deren Request dabei ab.
+    switchMap((query) =>
+      searchTerms$(query).pipe(
+        map((results) => ({ query, results })),
+        // Innerhalb von switchMap: Der Fehler beendet nur diese Suche, nicht den Strom.
+        catchError((error: unknown) => of({ query, error })),
+      ),
     ),
   );
 }

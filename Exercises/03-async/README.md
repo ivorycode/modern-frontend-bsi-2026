@@ -118,7 +118,7 @@ export async function loadSentenceParallel(fetchWord: FetchWord): Promise<string
 }
 ```
 
-`Array.from({ length: 9 }, (_, index) => …)` erzeugt ein Array mit neun Einträgen, ähnlich wie in Java `IntStream.range(0, 9).mapToObj(…)`. Alle neun Aufrufe von `fetchWord` starten sofort. `Promise.all` wird erfüllt, wenn alle Promises erfüllt sind, und liefert ein Array der Ergebnisse (in Java vergleichbar mit `CompletableFuture.allOf` plus Einsammeln der Resultate).
+`Array.from({ length: 9 }, (_, index) => …)` erzeugt ein Array mit neun Einträgen, ähnlich wie `IntStream.range(0, 9).mapToObj(…)`. Alle neun Aufrufe von `fetchWord` starten sofort. `Promise.all` wird erfüllt, wenn alle Promises erfüllt sind, und liefert ein Array der Ergebnisse (vergleichbar mit `CompletableFuture.allOf` plus Einsammeln der Resultate).
 
 </details>
 
@@ -596,30 +596,32 @@ Erwartet: Unit-Tests und der Playwright-Test «promise: …» bestehen. Der Test
 
 Angular arbeitet mit **Observables** aus [RxJS](https://rxjs.dev/), dem JavaScript-Gegenstück zu RxJava. Ein Promise liefert **ein** zukünftiges Ergebnis, ein Observable einen Strom von beliebig vielen Werten. Die Eingaben in ein Suchfeld sind so ein Strom.
 
-Unter `http://localhost:5175/suche.html?umsetzung=rxjs` verwendet die Seite `searchResults` aus `src/search-rx.ts`. `src/search-main.ts` macht aus den `input`-Events mit `fromEvent` einen Strom von Suchbegriffen.
+Unter `http://localhost:5175/suche.html?umsetzung=rxjs` verwendet die Seite `searchResults` aus `src/search-rx.ts`. `src/search-main.ts` macht aus den `input`-Events mit `fromEvent` einen Strom von Suchbegriffen. Gesucht wird mit `searchTerms$` aus `src/search-api.ts`: Sie liefert statt eines Promise ein Observable, erzeugt mit `fromFetch` aus `rxjs/fetch`.
+
+Ein Observable lässt sich im Gegensatz zu einem Promise abbrechen: Wer sich abmeldet (`unsubscribe`), beendet die Arbeit dahinter. Den Abbruch, den Sie in Vertiefung 1 selbst gebaut haben, liefert RxJS hier mit.
 
 ### Optional: Auftrag für einen Coding Agent
 
-> Die RxJS-Variante der Suche (`http://localhost:5175/suche.html?umsetzung=rxjs`, `src/search-rx.ts`) zeigt nach schnellem Tippen veraltete Treffer. Reproduziere das mit der Playwright CLI und erkläre, warum `mergeMap` dazu führt. Ersetze in `src/search-rx.test.ts` zuerst das `it.todo` «liefert nur die Treffer der neueren Suche, auch wenn die ältere zuletzt antwortet» durch einen fehlschlagenden Test mit einem `Subject` und der Attrappe aus `src/test-helpers.ts`. Behebe den Fehler mit `switchMap`. Die veraltete Suche soll per `AbortController` tatsächlich abgebrochen werden; ersetze das zweite `it.todo` durch einen Test dafür. Ergänze in `src/search-main.ts` `debounceTime(300)` und `distinctUntilChanged()`, nicht in `searchResults`. Führe `npm run check`, `npm test` und `npm run e2e` aus.
+> Die RxJS-Variante der Suche (`http://localhost:5175/suche.html?umsetzung=rxjs`, `src/search-rx.ts`) zeigt nach schnellem Tippen veraltete Treffer. Reproduziere das mit der Playwright CLI und erkläre, warum `mergeMap` dazu führt. Ersetze in `src/search-rx.test.ts` zuerst das `it.todo` «liefert nur die Treffer der neueren Suche, auch wenn die ältere zuletzt antwortet» durch einen fehlschlagenden Test mit einem `Subject` und der Attrappe `createFakeSearchTerms$` aus `src/test-helpers.ts`. Behebe den Fehler mit `switchMap`. Zeige mit einem Test anstelle des zweiten `it.todo`, dass die veraltete Suche abgebrochen wird. Nach einem fehlgeschlagenen Request soll die Suche weiter funktionieren: Ersetze das dritte `it.todo` durch einen fehlschlagenden Test und behebe den Fehler mit `catchError`. Ergänze in `src/search-main.ts` `debounceTime(300)` und `distinctUntilChanged()`, nicht in `searchResults`. Ändere `server/api.ts`, `src/search-api.ts`, `src/test-helpers.ts` und die Playwright-Tests nicht. Führe `npm run check`, `npm test` und `npm run e2e` aus.
 
 Prüfen Sie das Ergebnis:
 
-- Hat der Agent nur `mergeMap` durch `switchMap` ersetzt? Dann laufen veraltete Requests weiter (Schritt V2.3).
-- Bricht der Teardown des inneren Observables den Request ab?
+- Hat der Agent selbst einen `AbortController` oder ein `new Observable` gebaut? Das ist unnötig: `fromFetch` bricht den Request beim Abmelden ab (Schritt V2.3).
+- Steht `catchError` **innerhalb** von `switchMap`? Ausserhalb beendet ein Fehler weiterhin den ganzen Strom (Schritt V2.4).
 - Liegt `debounceTime` in `search-main.ts`, sodass die Unit-Tests ohne Zeit auskommen?
 
 ### Schritt für Schritt
 
 #### Schritt V2.1: Fehler nachvollziehen
 
-Öffnen Sie `http://localhost:5175/suche.html?umsetzung=rxjs` und tippen Sie zügig «react». Lesen Sie `src/search-rx.ts` und den Abschnitt `if (useRxjs)` in `src/search-main.ts`.
+Öffnen Sie `http://localhost:5175/suche.html?umsetzung=rxjs` und tippen Sie zügig «react». Lesen Sie `src/search-rx.ts`, `searchTerms$` in `src/search-api.ts` und den Abschnitt `if (useRxjs)` in `src/search-main.ts`.
 
 Was macht `mergeMap` mit jedem Suchbegriff, und in welcher Reihenfolge gibt es die Resultate weiter?
 
 <details>
 <summary>Lösungshinweis</summary>
 
-`mergeMap` startet für jeden Suchbegriff eine eigene Suche und gibt jedes Resultat weiter, sobald es eintrifft. Das ist derselbe Fehler wie in Vertiefung 1.
+`mergeMap` meldet sich für jeden Suchbegriff bei einer eigenen Suche an und gibt jedes Resultat weiter, sobald es eintrifft. Das ist derselbe Fehler wie in Vertiefung 1.
 
 ```text
 Suchbegriffe:  ──r──re──rea──reac──react────────────────►
@@ -631,7 +633,7 @@ switchMap:     ─────────────────────�
 
 #### Schritt V2.2: Fehlschlagenden Test schreiben
 
-Lesen Sie den vorbereiteten Test in `src/search-rx.test.ts`. Ein `Subject` ist ein Observable, in das der Test mit `next` selbst Werte einspeist; es ersetzt das Eingabefeld.
+Lesen Sie den vorbereiteten Test in `src/search-rx.test.ts` und `createFakeSearchTerms$` in `src/test-helpers.ts`. Ein `Subject` ist ein Observable, in das der Test mit `next` selbst Werte einspeist; es ersetzt das Eingabefeld. Die Attrappe liefert ihre Antworten sofort, wenn der Test `respond` aufruft. `flushPromises` ist deshalb nicht nötig.
 
 Ersetzen Sie das `it.todo` «liefert nur die Treffer der neueren Suche, auch wenn die ältere zuletzt antwortet» durch einen Test. Er muss mit `mergeMap` fehlschlagen.
 
@@ -639,18 +641,16 @@ Ersetzen Sie das `it.todo` «liefert nur die Treffer der neueren Suche, auch wen
 <summary>Lösungshinweis</summary>
 
 ```ts
-it("liefert nur die Treffer der neueren Suche, auch wenn die ältere zuletzt antwortet", async () => {
-  const fake = createFakeSearchTerms();
+it("liefert nur die Treffer der neueren Suche, auch wenn die ältere zuletzt antwortet", () => {
+  const fake = createFakeSearchTerms$();
   const queries = new Subject<string>();
   const received: SearchResult[] = [];
-  searchResults(queries, fake.searchTerms).subscribe((result) => received.push(result));
+  searchResults(queries, fake.searchTerms$).subscribe((result) => received.push(result));
 
   queries.next("re");
   queries.next("react");
   fake.respond("react", ["React"]);
-  await flushPromises();
   fake.respond("re", ["React", "Redux", "Remix"]);
-  await flushPromises();
 
   expect(received).toEqual([{ query: "react", results: ["React"] }]);
 });
@@ -663,27 +663,7 @@ it("liefert nur die Treffer der neueren Suche, auch wenn die ältere zuletzt ant
 Ersetzen Sie `mergeMap` durch `switchMap` und führen Sie die Tests aus. Tippen Sie im Browser zügig «react» und beobachten Sie den Network-Tab.
 
 - Besteht Ihr Test?
-- Werden die Requests für «r» und «re» abgebrochen?
-
-<details>
-<summary>Lösungshinweis</summary>
-
-```ts
-import { switchMap, type Observable } from "rxjs";
-
-// …
-return queries.pipe(switchMap(async (query) => ({ query, results: await searchTerms(query) })));
-```
-
-`switchMap` meldet sich bei jedem neuen Suchbegriff von der vorherigen Suche ab und gibt nur noch die Resultate der neuesten weiter. Der Test besteht.
-
-Die Requests für «r» und «re» laufen aber zu Ende, ihr Ergebnis wird nur verworfen. Ein Promise lässt sich nicht abbrechen.
-
-</details>
-
-#### Schritt V2.4: Veraltete Suche abbrechen
-
-Erzeugen Sie in `switchMap` statt eines Promise ein eigenes Observable mit `new Observable((subscriber) => { … })`. Die Funktion, die Sie darin zurückgeben (**Teardown**), ruft RxJS beim Abmelden auf. Brechen Sie dort die Suche mit einem `AbortController` ab.
+- Was geschieht mit den Requests für «r» und «re»? Vergleichen Sie mit der Promise-Variante vor Vertiefung 1.
 
 Ersetzen Sie danach das `it.todo` «bricht die vorherige Suche ab» durch einen Test.
 
@@ -691,39 +671,39 @@ Ersetzen Sie danach das `it.todo` «bricht die vorherige Suche ab» durch einen 
 <summary>Lösungshinweis</summary>
 
 ```ts
-import { Observable, switchMap } from "rxjs";
-import type { SearchTerms } from "./search-api.ts";
+import { map, switchMap, type Observable } from "rxjs";
 
 // …
-export function searchResults(
-  queries: Observable<string>,
-  searchTerms: SearchTerms,
-): Observable<SearchResult> {
-  return queries.pipe(
-    switchMap(
-      (query) =>
-        new Observable<SearchResult>((subscriber) => {
-          const controller = new AbortController();
-          searchTerms(query, controller.signal).then(
-            (results) => {
-              subscriber.next({ query, results });
-              subscriber.complete();
-            },
-            (error) => subscriber.error(error),
-          );
-          // Läuft, wenn switchMap auf einen neuen Suchbegriff wechselt.
-          return () => controller.abort();
-        }),
-    ),
-  );
-}
+return queries.pipe(
+  switchMap((query) => searchTerms$(query).pipe(map((results) => ({ query, results })))),
+);
 ```
+
+`switchMap` meldet sich bei jedem neuen Suchbegriff von der vorherigen Suche ab und gibt nur noch die Resultate der neuesten weiter. Der Test besteht.
+
+Im Network-Tab erscheinen die Requests für «r» und «re» als «(canceled)». Beim Abmelden bricht `fromFetch` den Request mit einem `AbortController` ab. Im Kern macht es dasselbe wie dieses eigene Observable: Die zurückgegebene Funktion (**Teardown**) ruft RxJS beim Abmelden auf.
+
+```ts
+new Observable<string[]>((subscriber) => {
+  const controller = new AbortController();
+  searchTerms(query, controller.signal).then(
+    (results) => {
+      subscriber.next(results);
+      subscriber.complete();
+    },
+    (error) => subscriber.error(error),
+  );
+  return () => controller.abort();
+});
+```
+
+Nach dem Abmelden leitet RxJS keine Werte und Fehler mehr weiter. Der `AbortError` erreicht die Seite deshalb nicht – die Unterscheidung aus Vertiefung 1 übernimmt hier `switchMap`. Angulars `HttpClient` funktioniert gleich: `switchMap((query) => http.get(…))` bricht veraltete Requests ab.
 
 ```ts
 it("bricht die vorherige Suche ab", () => {
-  const fake = createFakeSearchTerms();
+  const fake = createFakeSearchTerms$();
   const queries = new Subject<string>();
-  searchResults(queries, fake.searchTerms).subscribe();
+  searchResults(queries, fake.searchTerms$).subscribe();
 
   queries.next("re");
   queries.next("react");
@@ -733,7 +713,57 @@ it("bricht die vorherige Suche ab", () => {
 });
 ```
 
-Nach dem Abmelden leitet RxJS keine Werte und Fehler mehr weiter. Der `AbortError` erreicht die Seite deshalb nicht – die Unterscheidung aus Vertiefung 1 übernimmt hier `switchMap`. Angulars `HttpClient` bricht Requests beim Abmelden ebenfalls ab; dort genügt `switchMap((query) => http.get(…))`.
+</details>
+
+#### Schritt V2.4: Nach einem Fehler weitersuchen
+
+Stoppen Sie die API in Terminal 1 (`Ctrl+C`) und suchen Sie nach «vue». Der Entwicklungsserver antwortet mit HTTP 502, die Seite zeigt eine Fehlermeldung. Starten Sie die API wieder (`npm run api`) und suchen Sie nach «react».
+
+- Funktioniert die Suche danach noch?
+- Was geschieht mit einem Observable, wenn es einen Fehler meldet?
+
+Ersetzen Sie das `it.todo` «sucht nach einem Fehler weiter» durch einen fehlschlagenden Test und beheben Sie den Fehler mit `catchError`. Der Typ `SearchResult` sieht für einen Fehler bereits `{ query, error }` vor, und `search-main.ts` zeigt dafür die Meldung an.
+
+<details>
+<summary>Lösungshinweis</summary>
+
+Nein. Ein Observable endet nach einem Fehler endgültig. Der Fehler der inneren Suche beendet auch den äusseren Strom: Die Seite zeigt die Meldung, weitere Eingaben lösen keine Suche mehr aus.
+
+`catchError` **innerhalb** von `switchMap` wandelt den Fehler in einen normalen Wert um. Es beendet nur die eine Suche, der äussere Strom läuft weiter. Ausserhalb von `switchMap` würde `catchError` den ganzen Strom ersetzen, und die Suche wäre ebenfalls beendet.
+
+```ts
+import { catchError, map, of, switchMap, type Observable } from "rxjs";
+
+// …
+return queries.pipe(
+  switchMap((query) =>
+    searchTerms$(query).pipe(
+      map((results) => ({ query, results })),
+      catchError((error: unknown) => of({ query, error })),
+    ),
+  ),
+);
+```
+
+```ts
+it("sucht nach einem Fehler weiter", () => {
+  const fake = createFakeSearchTerms$();
+  const queries = new Subject<string>();
+  const received: SearchResult[] = [];
+  searchResults(queries, fake.searchTerms$).subscribe((result) => received.push(result));
+
+  const error = new Error("HTTP 500");
+  queries.next("vue");
+  fake.fail("vue", error);
+  queries.next("react");
+  fake.respond("react", ["React"]);
+
+  expect(received).toEqual([
+    { query: "vue", error },
+    { query: "react", results: ["React"] },
+  ]);
+});
+```
 
 </details>
 
@@ -772,12 +802,3 @@ npm run e2e
 ```
 
 Erwartet: Alle Unit-Tests und Playwright-Tests bestehen.
-
-Zum Schluss: Was geschieht in der RxJS-Variante, wenn eine Suche mit einem echten Fehler scheitert, etwa HTTP 500? Funktioniert die Suche danach noch?
-
-<details>
-<summary>Lösungshinweis</summary>
-
-Nein. Der Fehler beendet den ganzen Strom: Die Seite zeigt die Meldung, weitere Eingaben lösen keine Suche mehr aus. Ein Observable endet nach einem Fehler endgültig. Abhilfe schafft `catchError` **innerhalb** von `switchMap`: Es wandelt den Fehler in einen normalen Wert um, z. B. ein Resultat mit Fehlermeldung, und der äussere Strom läuft weiter.
-
-</details>

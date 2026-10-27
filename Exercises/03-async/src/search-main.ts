@@ -1,6 +1,6 @@
 import "./style.css";
 import { fromEvent, map } from "rxjs";
-import { searchTerms } from "./search-api.ts";
+import { searchTerms, searchTerms$ } from "./search-api.ts";
 import { createSearch, type SearchView } from "./search.ts";
 import { searchResults } from "./search-rx.ts";
 
@@ -33,8 +33,12 @@ document.querySelector(`a[data-umsetzung="${useRxjs ? "rxjs" : "promise"}"]`)!.a
 
 if (useRxjs) {
   const queries = fromEvent(input, "input").pipe(map(() => input.value.trim()));
-  searchResults(queries, searchTerms).subscribe({
-    next: ({ query, results }) => view.showResults(query, results),
+  searchResults(queries, searchTerms$).subscribe({
+    next: (result) =>
+      "error" in result
+        ? view.showError("Die Suche ist fehlgeschlagen.")
+        : view.showResults(result.query, result.results),
+    // Ohne catchError in searchResults beendet ein Fehler den ganzen Strom.
     error: () => view.showError("Die Suche ist fehlgeschlagen."),
   });
 } else {
