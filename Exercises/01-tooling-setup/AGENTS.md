@@ -10,7 +10,8 @@ Alle Werkzeuge sind lokal installiert; kein globales `vp` verwenden oder vorauss
 
 - `npm ci` – Abhängigkeiten installieren
 - `npm run dev` – Entwicklungsserver auf `http://localhost:5173/`
-- `npm run check` – Formatierung, Linting und Typprüfung; `npx vp check --fix` korrigiert Formatierung
+- `npm run check` – Formatierung, Linting und Typprüfung; `npx vp check --fix` korrigiert Formatierung; bricht beim ersten fehlgeschlagenen Schritt ab
+- `npm run typecheck` – nur Typprüfung (`vp check --no-fmt --no-lint`)
 - `npm test` – Unit-Tests (Vitest, `src/**/*.test.ts`); Imports aus `vite-plus/test`
 - `npm run e2e` – Playwright-Tests in `e2e/` im installierten Chrome
 - `npm run build` – Produktionsbuild

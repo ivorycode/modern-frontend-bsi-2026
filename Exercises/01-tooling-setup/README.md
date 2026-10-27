@@ -70,16 +70,16 @@ Lädt die Seite weiterhin? Führen Sie in einem zweiten Terminal aus:
 npm run check
 ```
 
+`check` prüft der Reihe nach Formatierung, Linting und Typen und bricht beim ersten fehlgeschlagenen Schritt ab. Meldet es nur Formatierungsprobleme, etwa einen fehlenden Zeilenumbruch am Dateiende, korrigieren Sie diese mit `npx vp check --fix` und führen `npm run check` erneut aus. Nur die Typprüfung führt `npm run typecheck` aus.
+
 Warum meldet `check` einen Fehler, obwohl die Seite läuft? Entfernen Sie die Zeile danach wieder.
 
 <details>
 <summary>Lösungshinweis</summary>
 
-`check` meldet `TS2322: Type 'number' is not assignable to type 'string'`: `value` ist ein String. Zur Laufzeit wandelt der Browser die Zahl stillschweigend in `"40"` um.
+`check` meldet `TS2322: Type 'number' is not assignable to type 'string'`: `value` ist ein String. Zur Laufzeit wandelt der Browser die Zahl stillschweigend in `"42"` um.
 
-Vite entfernt beim Ausliefern nur die Typannotationen, ohne Typprüfung. Die Typprüfung ist ein eigener Schritt (Editor, `npm run check`, CI). Anders als bei Java muss kein Compilerlauf vor dem Start erfolgreich sein.
-
-Formatierungsabweichungen korrigiert `npx vp check --fix`.
+Vite entfernt beim Ausliefern nur die Typannotationen, ohne Typprüfung. Die Typprüfung ist ein eigener Schritt (Editor, `npm run check` bzw. `npm run typecheck`, CI). Anders als bei Java muss kein Compilerlauf vor dem Start erfolgreich sein.
 
 </details>
 
