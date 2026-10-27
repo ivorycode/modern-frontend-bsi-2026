@@ -1,7 +1,5 @@
 console.log("TypeScript Demo \n\n ");
 
-console.log("Running Demo Code 2 ...");
-
 console.log("\n\n ");
 
 interface Person {
@@ -23,3 +21,22 @@ async function main() {
 }
 
 main();
+
+
+
+// DEMO: #### Runtime Validierung mit Zod
+// import { z } from "zod";
+//
+// // Das Schema prüft zur Laufzeit; der Typ wird daraus abgeleitet.
+// const PersonSchema = z.object({
+//   firstName: z.string(),
+//   movies: z.array(z.string()),
+// });
+// type Person = z.infer<typeof PersonSchema>;
+//
+//
+// async function fetchLuke(): Promise<Person> {
+//   const lukeResponse = await fetch(`https://swapi.info/api/people/1`);
+//   const luke = PersonSchema.parse(await lukeResponse.json());
+//   return luke;
+// }
