@@ -1,0 +1,26 @@
+{
+  "name": "react-server-components",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3030",
+    "build": "next build",
+    "start": "next start --port 3031",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "next": "^16.2.10",
+    "promised-sqlite3": "^2.1.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.10",
+    "prettier": "^3.4.2",
+    "typescript": "^5"
+  }
+}
