@@ -1,0 +1,118 @@
+/* Musterlösung Aufgabe 1: CSS Modules, ausschliesslich Design Tokens.
+   Enthält auch die beiden Vertiefungen (Container Query und :has()). */
+
+/* Vertiefung a (Container Query): Der Wrapper beobachtet die verfügbare Breite.
+   Ein Element kann sich nicht selbst per @container umstylen; der Container
+   muss ein Vorfahre von .card sein. */
+.host {
+  container-type: inline-size;
+}
+
+.card {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 1rem;
+  align-items: center;
+  position: relative; /* Anker für den Status-Punkt */
+}
+
+/* Vertiefung b (:has()): Die Karte reagiert auf Hover des Buttons, ohne JavaScript. */
+.card:has(.follow:hover) {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.avatar {
+  grid-row: span 2;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.status {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--status-offline);
+}
+
+.status.online {
+  background: var(--status-online);
+}
+
+.name {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600; /* Preflight von Tailwind setzt die Schriftstärke von h3 zurück */
+}
+
+.role {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+
+.skills {
+  grid-column: 1 / -1;
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.skills li {
+  font-size: 0.75rem;
+  border: 1px solid var(--edge);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  color: var(--ink-muted);
+}
+
+.follow {
+  grid-column: 1 / -1;
+  margin-top: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+}
+
+/* Vertiefung a (Container Query): Unter 300px Containerbreite
+   wird das Layout vertikal und zentriert. */
+@container (width < 300px) {
+  .card {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .avatar {
+    grid-row: auto; /* spannt nicht mehr über zwei Zeilen */
+  }
+
+  .follow {
+    justify-self: stretch; /* sonst wird der Button durch justify-items: center schmal */
+  }
+}

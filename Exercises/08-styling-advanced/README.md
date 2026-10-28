@@ -1,4 +1,4 @@
-# Übung 7: Kursanmeldung – von nativem CSS auf Tailwind umstellen
+# Übung 8: Kursanmeldung – von nativem CSS auf Tailwind umstellen
 
 Die Seite «Kursanmeldung» ist mit nativem CSS gestaltet (`src/styles.css`). Sie stellen sie **schrittweise** auf [Tailwind CSS 4](https://tailwindcss.com/docs) um. Darstellung und Verhalten dürfen sich nicht ändern. Screenshot-Tests halten den Ausgangsstand fest.
 
@@ -16,7 +16,7 @@ Jeder Schritt enthält einen ausklappbaren Lösungshinweis. Versuchen Sie es zue
 
 ## Teil 1: Die Seite umstellen
 
-Alle Befehle im Ordner `Exercises/07-styling` ausführen. Vorgehen in jedem Schritt:
+Alle Befehle im Ordner `Exercises/08-styling-advanced` ausführen. Vorgehen in jedem Schritt:
 
 1. Eine Komponente im Markup mit Utilities gestalten.
 2. Die zugehörigen Regeln aus `src/styles.css` löschen.

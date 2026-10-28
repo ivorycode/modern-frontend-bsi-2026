@@ -1,6 +1,6 @@
-# Musterlösung zu Übung 7: Kursanmeldung mit Tailwind
+# Musterlösung zu Übung 8: Kursanmeldung mit Tailwind
 
-Aufgabe: [Übung 7](../07-styling/README.md)
+Aufgabe: [Übung 8](../08-styling-advanced/README.md)
 
 ```sh
 npm install

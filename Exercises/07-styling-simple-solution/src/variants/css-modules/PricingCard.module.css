@@ -1,0 +1,87 @@
+/* ============================================================
+   Ansatz 1: CSS Modules
+   ------------------------------------------------------------
+   - Klassennamen werden beim Build gehasht (lokaler Scope)
+   - Kein Runtime-Overhead, reines CSS
+   - Kollisionsschutz durch Tooling (Vite/webpack), nicht Browser
+   - Kein "echtes" dynamisches Styling: Zustand via Klassen
+     oder Custom Properties von aussen
+   ============================================================ */
+
+.card {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.card.highlighted {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.badge {
+  justify-self: start;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+}
+
+.name {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.price {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.period {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--ink-muted);
+  margin-left: 0.4rem;
+}
+
+.features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+}
+
+.features li::before {
+  content: "✓ ";
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.cta {
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.cta:hover {
+  filter: brightness(1.1);
+}

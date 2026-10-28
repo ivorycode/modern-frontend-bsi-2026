@@ -1,0 +1,113 @@
+/* ============================================================
+   Globale Design Tokens (CSS Custom Properties)
+   ------------------------------------------------------------
+   Diese Tokens sind die gemeinsame Basis für ALLE Styling-
+   Ansätze in dieser Demo (CSS Modules, styled-components,
+   vanilla-extract, Tailwind). Das ist die zentrale Lektion:
+   Design Tokens als Custom Properties sind Framework- und
+   Ansatz-übergreifend.
+   ============================================================ */
+
+@import "tailwindcss";
+
+/* Tailwind v4: Tokens werden CSS-first im @theme-Block definiert
+   und stehen dann als Utilities zur Verfügung (bg-surface, ...). */
+@theme {
+  --color-surface: var(--surface);
+  --color-surface-alt: var(--surface-alt);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-accent: var(--accent);
+  --color-accent-contrast: var(--accent-contrast);
+  --color-edge: var(--edge);
+  --color-status-online: var(--status-online);
+  --color-status-offline: var(--status-offline);
+}
+
+:root {
+  /* Light Theme (Default) */
+  --surface: #ffffff;
+  --surface-alt: #f4f5f7;
+  --ink: #1a2233;
+  --ink-muted: #5b6472;
+  --accent: #2f6fed;
+  --accent-contrast: #ffffff;
+  --edge: #d9dde3;
+  --status-online: #2fbf71;
+  --status-offline: #8a919c;
+
+  --radius-card: 14px;
+  --shadow-card: 0 4px 16px rgb(16 24 40 / 0.08);
+
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --surface: #1c2333;
+  --surface-alt: #131826;
+  --ink: #eef1f6;
+  --ink-muted: #9aa4b5;
+  --accent: #7aa2ff;
+  --accent-contrast: #10182b;
+  --edge: #323c52;
+  --status-online: #3ddc84;
+  --status-offline: #6b7385;
+
+  --shadow-card: 0 4px 16px rgb(0 0 0 / 0.4);
+
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background: var(--surface-alt);
+  color: var(--ink);
+  transition:
+    background 0.25s ease,
+    color 0.25s ease;
+}
+
+.demo-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.demo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.demo-header h1 {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.demo-header button {
+  border: 1px solid var(--edge);
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.demo-grid > section > h2 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  margin: 0 0 0.75rem;
+}
