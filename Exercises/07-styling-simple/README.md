@@ -13,7 +13,7 @@ npm ci
 npm run dev
 ```
 
-Öffnen Sie `http://localhost:5177/` in Chrome. Die vier Karten oben sehen gleich aus, sind aber unterschiedlich umgesetzt (`src/variants/`). Unten steht die `ProfileCard` als ungestylter Text.
+Öffnen Sie `http://localhost:5177/` in Chrome. Die vier Karten oben sind unterschiedlich umgesetzt (`src/variants/`). Die ersten drei sehen gleich aus, die Karte mit Tailwind weicht leicht ab. Unten steht die `ProfileCard` als ungestylter Text.
 
 **a) Farbschema umschalten.** Klicken Sie auf «Dark Mode». Was ändert sich an der Seite? Lesen Sie `toggleTheme` in `src/App.tsx` und die Tokens in `src/index.css`. Wie viel Code für das dunkle Farbschema steckt in den vier Karten?
 
@@ -26,14 +26,16 @@ npm run dev
 
 **Farbschema:** Der Schalter setzt nur das Attribut `data-theme="dark"` am `<html>`-Element. In `src/index.css` definiert `[data-theme="dark"]` dieselben Custom Properties (`--surface`, `--ink`, `--accent`, …) mit dunklen Werten neu. Die Karten referenzieren nur diese Tokens und enthalten keine Zeile Dark-Mode-CSS. Custom Properties werden vererbt und erst im Browser aufgelöst, deshalb funktionieren sie mit jedem der vier Ansätze.
 
+**Abweichung der Tailwind-Karte:** Die ersten drei Karten verwenden freie Werte wie `font-size: 0.85rem` oder `1.1rem`. Die Karte mit Tailwind nimmt stattdessen die nächstliegenden Stufen der Skala (`text-sm`, `text-lg`), die auch die Zeilenhöhe mitbringen. Das ist bewusst so: Tailwind ist «opinionated» und gibt eine Skala vor, an die man sich halten soll. Mit willkürlichen Werten in eckigen Klammern (`text-[0.85rem]`) liesse sich jede Karte exakt nachbauen; dann schreibt man aber Inline-CSS mit anderer Syntax und verliert die Konsistenz der Skala.
+
 **Klassennamen und Herkunft des CSS:**
 
-| Ansatz            | Klassen am `<article>`                           | Herkunft des CSS                                                                        |
-| ----------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| CSS Modules       | `_card_g54be_11 _highlighted_g54be_22`           | Normale CSS-Datei; Vite hängt beim Build einen Hash an jeden Klassennamen               |
-| styled-components | `sc-bdnzMm ZACjr`                                | Wird **zur Laufzeit** im Browser erzeugt und in ein `<style data-styled>` geschrieben   |
-| vanilla-extract   | `pricingCard_card_highlighted__9okrkv2 …`        | In TypeScript geschrieben (`.css.ts`), beim Build als statische CSS-Datei ausgegeben    |
-| Tailwind          | `grid gap-4 rounded-2xl border bg-surface p-6 …` | Utilities direkt im Markup; Tailwind erzeugt CSS für alle Klassen in den Projektdateien |
+| Ansatz            | Klassen am `<article>`                                       | Herkunft des CSS                                                                        |
+| ----------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| CSS Modules       | `_card_g54be_11 _highlighted_g54be_22`                       | Normale CSS-Datei; Vite hängt beim Build einen Hash an jeden Klassennamen               |
+| styled-components | `sc-bdnzMm ZACjr`                                            | Wird **zur Laufzeit** im Browser erzeugt und in ein `<style data-styled>` geschrieben   |
+| vanilla-extract   | `pricingCard_card_highlighted__9okrkv2 …`                    | In TypeScript geschrieben (`.css.ts`), beim Build als statische CSS-Datei ausgegeben    |
+| Tailwind          | `grid gap-4 rounded-(--radius-card) border bg-surface p-6 …` | Utilities direkt im Markup; Tailwind erzeugt CSS für alle Klassen in den Projektdateien |
 
 Die Hashes sehen bei Ihnen anders aus. CSS Modules lösen das Problem globaler Klassennamen mit Werkzeugen: Zwei Dateien dürfen beide eine Klasse `.card` definieren, ohne dass sie kollidieren. styled-components ist seit 2025 im Maintenance Mode. Für neue Projekte ist es nicht mehr empfohlen; man trifft es aber in vielen bestehenden Projekten an. vanilla-extract bietet Ähnliches ohne Laufzeitkosten.
 
@@ -95,7 +97,7 @@ Prüfen Sie:
   padding: 1.5rem;
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 0.35rem 1rem;
+  gap: 0.375rem 1rem;
   align-items: center;
   position: relative; /* Anker für den Status-Punkt */
 }
@@ -110,7 +112,7 @@ Prüfen Sie:
   display: grid;
   place-items: center;
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.125rem;
 }
 
 .status {
@@ -129,13 +131,14 @@ Prüfen Sie:
 
 .name {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 600;
 }
 
 .role {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   color: var(--ink-muted);
 }
 
@@ -146,14 +149,15 @@ Prüfen Sie:
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.375rem;
 }
 
 .skills li {
   font-size: 0.75rem;
+  line-height: 1rem;
   border: 1px solid var(--edge);
   border-radius: 999px;
-  padding: 0.2rem 0.6rem;
+  padding: 0.25rem 0.625rem;
   color: var(--ink-muted);
 }
 
@@ -165,8 +169,9 @@ Prüfen Sie:
   background: var(--accent);
   color: var(--accent-contrast);
   font-weight: 600;
-  font-size: 0.9rem;
-  padding: 0.6rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding: 0.625rem 1rem;
   cursor: pointer;
 }
 ```
@@ -201,9 +206,10 @@ export function ProfileCard({ profile }: { profile: Profile }) {
 
 - **Typischer Fehler:** `background: white` statt `var(--surface)`. Im hellen Farbschema sieht das gleich aus; erst der Test für das dunkle Farbschema scheitert.
 - **`margin: 0`:** `h3` und `p` haben Abstände aus dem Browser-Standard, die das Grid auseinanderdrücken.
-- **`font-weight: 600`:** Das Projekt bindet Tailwind ein, und dessen Reset **Preflight** gilt für die ganze Seite. Er setzt unter anderem die Schriftstärke von Überschriften zurück. Ohne diese Zeile ist der Name nicht fett. Dieselbe Ursache sehen Sie bei «Pro» in den Karten mit CSS Modules, styled-components und vanilla-extract.
+- **`font-weight: 600`:** Das Projekt bindet Tailwind ein, und dessen Reset **Preflight** gilt für die ganze Seite. Er setzt unter anderem die Schriftstärke von Überschriften zurück. Ohne diese Zeile ist der Name nicht fett. Aus demselben Grund setzen die PricingCards mit CSS Modules, styled-components und vanilla-extract die Schriftstärke von «Pro» ausdrücklich.
 - **Bedingte Klassen:** Bei mehreren Bedingungen wird das Zusammensetzen von Strings unübersichtlich. Viele Projekte verwenden dafür die kleine Bibliothek `clsx`: `clsx(styles.status, profile.online && styles.online)`.
 - **Status-Tokens:** Auch für den Status gibt es Tokens (`--status-online`, `--status-offline`). Auf diese Weise kann das dunkle Farbschema auch diese Farben anpassen.
+- **Werte wie in Tailwind:** Schriftgrössen, Abstände und Zeilenhöhen stammen aus der Skala von Tailwind (`0.875rem` mit `line-height: 1.25rem` entspricht `text-sm`). So sieht die Fassung aus Schritt 3 genau gleich aus. Eigene Werte wie `0.85rem` sind ebenso richtig. Dann weichen die beiden Karten aber um einzelne Pixel voneinander ab, ausser Sie schreiben in Tailwind willkürliche Werte wie `text-[0.85rem]`.
 
 </details>
 
@@ -302,6 +308,7 @@ export function ProfileCardTailwind({ profile }: { profile: Profile }) {
 - **Vollständige Klassennamen:** Tailwind liest die Projektdateien als Text und erzeugt CSS nur für Klassennamen, die vollständig darin vorkommen. `` `bg-status-${profile.online ? "online" : "offline"}` `` ergibt im Browser zwar den richtigen Namen, aber Tailwind hat dafür kein CSS erzeugt.
 - **Tokens ohne Utility:** Radius und Schatten sind nicht im `@theme`-Block registriert. `rounded-(--radius-card)` ist die Kurzform für `border-radius: var(--radius-card)`. Die naheliegenden `rounded-2xl` und `shadow-lg` aus der Skala von Tailwind entsprechen den Tokens nur ungefähr, und `shadow-lg` färbt im dunklen Farbschema nicht um.
 - **`grid-cols-[auto_1fr]`** ist ein willkürlicher Wert in eckigen Klammern; der Unterstrich steht für ein Leerzeichen.
+- **Schriftgrösse und Zeilenhöhe:** Die Utilities `text-xs`, `text-sm`, `text-base` und `text-lg` setzen neben `font-size` auch eine passende `line-height`. Ohne `line-height` in Ihrem CSS erben die Elemente dort die Zeilenhöhe der Seite (`1.5`), und Pills und Button sind in der Fassung mit Tailwind etwas niedriger. Vergleichen Sie im Zweifel die berechneten Werte in den DevTools (Tab «Computed»).
 
 </details>
 
@@ -322,7 +329,7 @@ Beantworten Sie für sich, am besten mit Beispielen aus Ihrem Code:
 1. CSS Modules: zwei Dateien (TSX und CSS). Tailwind: eine Datei.
 2. Bei CSS Modules beschreibt das Markup die **Struktur** (`card`, `avatar`, `status`), das Styling steht in einer zweiten Datei. Bei Tailwind steht das Styling **am Element**; dafür trägt das `<article>` über ein Dutzend Utilities, und die Bedeutung der Elemente steckt nur noch im Tag und im Inhalt.
 3. CSS Modules: ein Name pro gestaltetem Element. Tailwind: keine Namen. Die Wiederverwendung geschieht über die Komponente selbst.
-4. Tailwind ist oft schneller, weil der Wechsel zwischen Dateien entfällt und die Skala Werte vorgibt. CSS Modules lassen sich leichter lesen, wenn viele Regeln oder komplexe Selektoren zusammenkommen. Beide sind gekapselt: Eine Änderung trifft nur diese Komponente.
+4. Tailwind ist oft schneller, weil der Wechsel zwischen Dateien entfällt und die Skala Werte vorgibt. CSS Modules lassen sich leichter lesen, wenn viele Regeln oder komplexe Selektoren zusammenkommen. Beide sind gekapselt: Eine Änderung trifft nur diese Komponente. Die Skala hat auch eine Kehrseite, das zeigen die beiden Beispiele: Die `ProfileCard` ist auf der Skala entworfen, deshalb sehen beide Fassungen gleich aus. Die `PricingCard` verwendet freie Werte, und die Fassung mit Tailwind weicht leicht ab. Folgt ein Design nicht der Skala, entscheidet man sich: das Design an die Skala anpassen oder mit willkürlichen Werten gegen Tailwind arbeiten. In der Regel ist Anpassen der bessere Weg.
 5. Vite erzeugt bei CSS Modules die eindeutigen Klassennamen, Tailwind erzeugt die Utilities und den Reset Preflight. Custom Properties, Vererbung, Grid, `position` und das Umfärben im dunklen Farbschema liefert der Browser mit nativem CSS. Deshalb funktionieren die Tokens in allen vier Ansätzen.
 6. styled-components praktisch nur noch in bestehenden Projekten. vanilla-extract, wenn ein Design System seine Styles typsicher in TypeScript beschreiben und als statisches CSS ausliefern soll. Für die meisten Projekte genügen CSS Modules oder Tailwind.
 
@@ -339,12 +346,12 @@ Beantworten Sie für sich, am besten mit Beispielen aus Ihrem Code:
 
 ## Vertiefung
 
-**a) Container Query.** Die Karte mit CSS Modules soll ihr Layout ändern, wenn ihr **Container** schmaler als 300 px ist: alles untereinander und zentriert. Verwenden Sie `container-type: inline-size` und `@container`. Bei welchen Fensterbreiten ist die Karte danach vertikal, bei welchen horizontal? Schreiben Sie einen Playwright-Test, der beide Zustände prüft (`page.setViewportSize`).
+**a) Container Query.** Die Karte soll ihr Layout ändern, wenn ihr **Container** schmaler als 300 px ist: alles untereinander und zentriert. Setzen Sie das zuerst mit CSS Modules um (`container-type: inline-size` und `@container`), danach in der Fassung mit Tailwind, damit beide Karten weiterhin gleich aussehen. Bei welchen Fensterbreiten ist die Karte danach vertikal, bei welchen horizontal? Schreiben Sie einen Playwright-Test, der beide Zustände für beide Karten prüft (`page.setViewportSize`).
 
 <details>
 <summary>Lösungshinweis</summary>
 
-Eine Container Query wertet immer einen **Vorfahren** aus; ein Element kann sich nicht selbst abfragen. `container-type` direkt an `.card` wirkt deshalb nicht auf `.card`. Legen Sie ein Element um die Karte:
+Eine Container Query wertet immer einen **Vorfahren** aus; ein Element kann sich nicht selbst abfragen. `container-type` direkt an `.card` wirkt deshalb nicht auf `.card`. Legen Sie in `ProfileCard.tsx` ein Element um die Karte:
 
 ```tsx
 <div className={styles.host}>
@@ -376,22 +383,35 @@ Eine Container Query wertet immer einen **Vorfahren** aus; ein Element kann sich
 
 Auf dem Desktop ist die Karte **vertikal**: Das Raster der Demo hat dort bis zu vier Spalten von etwa 270 px. Bei etwa 350 bis 590 px Fensterbreite gibt es nur eine Spalte, und die Karte ist breiter als 300 px und damit **horizontal**. Ein schmaleres Fenster ergibt hier also das breitere Layout. Mit einer Media Query wäre das nicht möglich, denn sie kennt nur die Breite des Fensters. Dieselbe Karte verhält sich in einer schmalen Seitenleiste anders als im breiten Inhaltsbereich.
 
-```ts
-test("Layout hängt von der Breite des Containers ab", async ({ page }) => {
-  const karte = page
-    .getByRole("region", { name: "Übung · ProfileCard (CSS Modules)" })
-    .getByRole("article");
+In Tailwind entspricht `@container` am Wrapper `container-type: inline-size`. Die Varianten `@max-[300px]:…` erzeugen `@container (width < 300px)` und gelten nur in diesem Fall. Sie stehen jeweils am Element, das sich ändert:
 
-  await page.setViewportSize({ width: 1280, height: 900 });
-  await page.goto("/");
-  await expect(karte).toHaveCSS("text-align", "center");
-
-  await page.setViewportSize({ width: 500, height: 900 });
-  await expect(karte).toHaveCSS("text-align", "start");
-});
+```tsx
+<div className="@container">
+  <article className="… @max-[300px]:grid-cols-1 @max-[300px]:justify-items-center @max-[300px]:text-center">
+    <div className="row-span-2 … @max-[300px]:row-auto">{initials(profile.name)}</div>…
+    <button className="col-span-full … @max-[300px]:justify-self-stretch">Folgen</button>
+  </article>
+</div>
 ```
 
-In Tailwind gibt es dafür `@container` am Wrapper und Varianten wie `@max-[300px]:text-center` an den Kindern.
+Die vordefinierten Grössen wie `@max-xs` (`20rem`, also 320 px) liegen nicht genau bei 300 px. Deshalb steht der Wert hier in eckigen Klammern.
+
+Ein Test für beide Karten:
+
+```ts
+for (const abschnitt of ["Übung · ProfileCard (CSS Modules)", "Übung · ProfileCard (Tailwind)"]) {
+  test(`Layout hängt von der Breite des Containers ab (${abschnitt})`, async ({ page }) => {
+    const karte = page.getByRole("region", { name: abschnitt }).getByRole("article");
+
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto("/");
+    await expect(karte).toHaveCSS("text-align", "center");
+
+    await page.setViewportSize({ width: 500, height: 900 });
+    await expect(karte).toHaveCSS("text-align", "start");
+  });
+}
+```
 
 </details>
 

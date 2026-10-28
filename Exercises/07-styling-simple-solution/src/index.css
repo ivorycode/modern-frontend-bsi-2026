@@ -110,4 +110,6 @@ body {
   letter-spacing: 0.08em;
   color: var(--ink-muted);
   margin: 0 0 0.75rem;
+  /* Platz für zwei Zeilen, damit die Karten auch bei umbrechenden Titeln auf gleicher Höhe beginnen */
+  min-height: 2lh;
 }

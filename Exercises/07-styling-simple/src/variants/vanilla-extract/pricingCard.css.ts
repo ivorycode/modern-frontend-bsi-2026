@@ -54,6 +54,7 @@ export const badge = style({
 export const name = style({
   margin: 0,
   fontSize: "1.1rem",
+  fontWeight: 600, // Preflight von Tailwind setzt die Schriftstärke von h3 zurück
 });
 
 export const price = style({

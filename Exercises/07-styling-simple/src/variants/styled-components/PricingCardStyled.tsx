@@ -43,6 +43,7 @@ const Badge = styled.span`
 const Name = styled.h3`
   margin: 0;
   font-size: 1.1rem;
+  font-weight: 600; /* Preflight von Tailwind setzt die Schriftstärke von h3 zurück */
 `;
 
 const Price = styled.div`

@@ -12,18 +12,24 @@ import type { PricingPlan } from "../../data.ts";
  *   und kein Naming-Aufwand
  * - In echten Projekten: Wiederverwendung über KOMPONENTEN
  *   (genau wie hier), nicht über @apply
+ * - Radius und Schatten über die Tokens: rounded-(--radius-card),
+ *   shadow-(--shadow-card)
+ * - Grössen und Abstände bewusst aus der Skala von Tailwind statt
+ *   der freien Werte der anderen drei Ansätze (z. B. text-sm statt
+ *   0.85rem). Die Karte sieht deshalb leicht anders aus: Die Skala
+ *   ist eine Designentscheidung, keine Einschränkung.
  */
 export function PricingCardTailwind({ plan }: { plan: PricingPlan }) {
   return (
     <article
-      className={`grid gap-4 rounded-2xl border bg-surface p-6 text-ink shadow-lg ${
+      className={`grid gap-4 rounded-(--radius-card) border bg-surface p-6 text-ink shadow-(--shadow-card) ${
         plan.highlighted
           ? "border-accent outline-2 outline-accent -outline-offset-2"
           : "border-edge"
       }`}
     >
       {plan.highlighted && (
-        <span className="justify-self-start rounded-full bg-accent px-2.5 py-1 text-[0.7rem] font-semibold tracking-widest text-accent-contrast uppercase">
+        <span className="justify-self-start rounded-full bg-accent px-2.5 py-1 text-xs font-semibold tracking-widest text-accent-contrast uppercase">
           Beliebt
         </span>
       )}
@@ -40,7 +46,7 @@ export function PricingCardTailwind({ plan }: { plan: PricingPlan }) {
           </li>
         ))}
       </ul>
-      <button className="cursor-pointer rounded-lg border-none bg-accent px-4 py-3 text-[0.95rem] font-semibold text-accent-contrast transition hover:brightness-110">
+      <button className="cursor-pointer rounded-lg border-none bg-accent px-4 py-3 text-base font-semibold text-accent-contrast transition hover:brightness-110">
         {plan.cta}
       </button>
     </article>
