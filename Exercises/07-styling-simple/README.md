@@ -64,6 +64,8 @@ Anforderungen:
 - Der Status-Punkt ist grün, wenn `online`, sonst grau (bedingte Klasse).
 - Der Button «Folgen» verwendet `--accent` und `--accent-contrast`.
 
+Die `PricingCard` in `src/variants/css-modules/` zeigt den Ansatz an einer einfacheren Karte, einschliesslich einer bedingten Klasse (`highlighted`). Nutzen Sie sie als Vorlage.
+
 Vorgehen:
 
 1. **Datei anlegen und einbinden.** Legen Sie neben `ProfileCard.tsx` die Datei `ProfileCard.module.css` an und importieren Sie sie mit `import styles from "./ProfileCard.module.css";`. Die Endung `.module.css` sorgt dafür, dass Vite die Klassennamen mit einem Hash versieht. Klassen weisen Sie über das importierte Objekt zu: `<article className={styles.card}>`.
@@ -222,6 +224,8 @@ Den erwarteten Stand beschreibt der Lösungshinweis unten.
 
 ### Schritt für Schritt
 
+Die `PricingCard` in `src/variants/tailwind/` zeigt den Ansatz an einer einfacheren Karte. Nutzen Sie sie als Vorlage. Ihr Layout ist aber ein einfacher Stapel; für die `ProfileCard` brauchen Sie zusätzliche Utilities.
+
 1. Legen Sie `src/exercise/ProfileCardTailwind.tsx` an. Kopieren Sie das JSX aus `ProfileCard.tsx` in eine neue Komponente `ProfileCardTailwind`. Importieren Sie `Profile` und `initials` aus `./ProfileCard.tsx`, statt sie zu kopieren.
 2. Binden Sie die Karte in `src/App.tsx` nach dem Abschnitt für CSS Modules ein, damit Sie beide nebeneinander sehen. Die Tests finden die Karte über die Überschrift des Abschnitts:
 
@@ -294,6 +298,7 @@ export function ProfileCardTailwind({ profile }: { profile: Profile }) {
 }
 ```
 
+- **Neu gegenüber der `PricingCard`:** Spannen im Grid (`grid-cols-[auto_1fr]`, `row-span-2`, `col-span-full`), Positionierung (`relative` an der Karte, `absolute top-5 right-5` am Punkt), ein Kreis mit zentriertem Inhalt (`size-14 rounded-full grid place-items-center`), umbrechende Pills (`flex flex-wrap`) und die Kurzform `(--…)` für Tokens ohne eigene Utility. Die bedingte Klasse kennen Sie schon: `highlighted` bei der `PricingCard` entspricht `online` hier.
 - **Vollständige Klassennamen:** Tailwind liest die Projektdateien als Text und erzeugt CSS nur für Klassennamen, die vollständig darin vorkommen. `` `bg-status-${profile.online ? "online" : "offline"}` `` ergibt im Browser zwar den richtigen Namen, aber Tailwind hat dafür kein CSS erzeugt.
 - **Tokens ohne Utility:** Radius und Schatten sind nicht im `@theme`-Block registriert. `rounded-(--radius-card)` ist die Kurzform für `border-radius: var(--radius-card)`. Die naheliegenden `rounded-2xl` und `shadow-lg` aus der Skala von Tailwind entsprechen den Tokens nur ungefähr, und `shadow-lg` färbt im dunklen Farbschema nicht um.
 - **`grid-cols-[auto_1fr]`** ist ein willkürlicher Wert in eckigen Klammern; der Unterstrich steht für ein Leerzeichen.
