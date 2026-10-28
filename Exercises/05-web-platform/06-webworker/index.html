@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <title>Übung 5.6: Web Worker</title>
+    <style>
+      body { font-family: system-ui, sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+      #clock { font-size: 2rem; font-variant-numeric: tabular-nums; }
+      section { margin: 1.5rem 0; }
+      input, button { padding: 0.5rem; font-size: 1rem; }
+      input[type="text"] { width: 100%; box-sizing: border-box; }
+      #result { display: block; margin-top: 1rem; font-weight: bold; }
+    </style>
+  </head>
+  <body>
+    <h1>Fibonacci</h1>
+
+    <section>
+      <p>Uhr (läuft im Hauptthread): <output id="clock"></output></p>
+      <input type="text" placeholder="Tippen Sie hier, während gerechnet wird …" />
+    </section>
+
+    <section>
+      <label>n = <input type="number" id="n" value="42" min="1" max="50" /></label>
+      <button id="mainButton">Im Hauptthread berechnen</button>
+      <button id="workerButton">Im Worker berechnen</button>
+      <button id="cancelButton" disabled>Abbrechen</button>
+      <output id="result"></output>
+    </section>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>

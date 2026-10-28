@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <title>Übung 5.5: Formulare</title>
+    <style>
+      body { font-family: system-ui, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+      section { margin-bottom: 2rem; padding: 1rem; border: 1px solid #ddd; border-radius: 5px; }
+      h2 { margin-top: 0; }
+      input, button { display: block; margin: 0.25rem 0; padding: 0.5rem; width: 100%; box-sizing: border-box; }
+      button { background: #007bff; color: white; border: none; cursor: pointer; }
+      pre { margin-top: 0.5rem; padding: 0.5rem; background: #f0f0f0; border-radius: 3px; white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <h1>Anmeldung senden</h1>
+
+    <section>
+      <h2>Als JSON senden</h2>
+      <input type="text" id="jsonName" placeholder="Name" value="Anna Muster" />
+      <input type="email" id="jsonEmail" placeholder="E-Mail" value="anna@example.com" />
+      <button id="jsonButton">JSON senden</button>
+      <pre id="jsonResult"></pre>
+    </section>
+
+    <section>
+      <h2>Als Formular senden</h2>
+      <form id="registrationForm">
+        <input type="text" name="name" placeholder="Name" value="Beat Beispiel" />
+        <input type="email" name="email" placeholder="E-Mail" value="beat@example.com" />
+        <button>Formular senden</button>
+      </form>
+      <pre id="formResult"></pre>
+    </section>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
